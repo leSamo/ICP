@@ -17,9 +17,9 @@
    <widget class="QTextEdit" name="CodeEditor">
     <property name="geometry">
      <rect>
-      <x>169</x>
+      <x>199</x>
       <y>60</y>
-      <width>611</width>
+      <width>581</width>
       <height>460</height>
      </rect>
     </property>
@@ -61,16 +61,6 @@
     </property>
     <property name="text">
      <string>Generate Template</string>
-    </property>
-   </widget>
-   <widget class="QListView" name="listView">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>151</width>
-      <height>461</height>
-     </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -157,6 +147,21 @@
     <property name="text">
      <string>Help</string>
     </property>
+   </widget>
+   <widget class="QTreeWidget" name="blockTree">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>181</width>
+      <height>461</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string notr="true">1</string>
+     </property>
+    </column>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
