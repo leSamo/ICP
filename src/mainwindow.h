@@ -17,9 +17,9 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_HelpButton_clicked();
     void displayTree();
     void on_blockTree_itemClicked(QTreeWidgetItem *item, int column);
+    void on_HelpIt_triggered();
 
 private:
     Ui::MainWindow *ui;

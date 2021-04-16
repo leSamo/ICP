@@ -16,16 +16,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-void MainWindow::on_HelpButton_clicked()
-{
-    HelpDialog hd;
-    hd.setModal(true);
-    hd.exec();
-}
-
-QVector<QPair<QString, QString>> *blockVector = new QVector<QPair<QString, QString>>;
-
+QMap<QString, QString> map;
 
 void MainWindow::displayTree()
 {
@@ -68,25 +59,41 @@ void MainWindow::displayTree()
     mchild4->setText(0, "DIV block");
     math_root->addChild(mchild4);
 
+    // arithmetic blocks declaration
+    map.insert("ADD block", "int ADD(int a, int b) {\n   return a + b\n}");
+    map.insert("SUB block", "int SUB(int a, int b) {\n   return a - b\n}");
+    map.insert("MUL block", "int MUL(int a, int b) {\n   return a * b\n}");
+    map.insert("DIV block", "int DIV(int a, int b) {\n   return a / b\n}");
 
-    QPair<QString, QString> math_add("ADD block", "int ADD(int a, int b) {\n   return a + b}");
-    blockVector->append(math_add);
-    QPair<QString, QString> math_sub("SUB block", "int SUB(int a, int b) {\n   return a - b}");
-    blockVector->append(math_sub);
-    QPair<QString, QString> math_mul("MUL block", "int MUL(int a, int b) {\n   return a * b}");
-    blockVector->append(math_mul);
-    QPair<QString, QString> math_div("DIV block", "int DIV(int a, int b) {\n   return a / b}");
-    blockVector->append(math_div);
+    // logic blocks declaration
+    map.insert("AND block", "int AND(int a, int b) {\n   return a && b\n}");
+    map.insert("OR block", "int OR(int a, int b) {\n   return a || b\n}");
+    map.insert("NOT block", "int NOT(int a) {\n   return !a \n}");
+
 }
 
 void MainWindow::on_blockTree_itemClicked(QTreeWidgetItem *item, int column)
 {
-    // TODO: add searching in vector
     if (item->text(0) == "ADD block"){
-          ui->CodeEditor->setText(blockVector->first().second);
+          ui->CodeEditor->setText(map["ADD block"]);
     } else if (item->text(0) == "SUB block") {
-        ui->CodeEditor->setText("");
-    } else {
-        ui->CodeEditor->setText("");
+        ui->CodeEditor->setText(map["SUB block"]);
+    } else if (item->text(0) == "MUL block") {
+        ui->CodeEditor->setText(map["MUL block"]);
+    } else if (item->text(0) == "DIV block") {
+        ui->CodeEditor->setText(map["DIV block"]);
+    } else if (item->text(0) == "AND block") {
+        ui->CodeEditor->setText(map["AND block"]);
+    } else if (item->text(0) == "OR block") {
+        ui->CodeEditor->setText(map["OR block"]);
+    } else if (item->text(0) == "NOT block") {
+        ui->CodeEditor->setText(map["NOT block"]);
     }
+}
+
+void MainWindow::on_HelpIt_triggered()
+{
+    HelpDialog hd;
+    hd.setModal(true);
+    hd.exec();
 }
