@@ -163,7 +163,7 @@
      <string>Check</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="ResetT_3">
+   <widget class="QPushButton" name="Editor">
     <property name="geometry">
      <rect>
       <x>660</x>

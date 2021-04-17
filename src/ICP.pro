@@ -11,15 +11,18 @@ CONFIG += c++11
 SOURCES += \
     helpdialog.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mainwindoweditor.cpp
 
 HEADERS += \
     helpdialog.h \
-    mainwindow.h
+    mainwindow.h \
+    mainwindoweditor.h
 
 FORMS += \
     helpdialog.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    mainwindoweditor.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -97,3 +97,9 @@ void MainWindow::on_HelpIt_triggered()
     hd.setModal(true);
     hd.exec();
 }
+
+void MainWindow::on_Editor_clicked()
+{
+    editor = new MainWindowEditor(this);
+    editor->show();
+}
