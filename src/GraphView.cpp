@@ -1,7 +1,13 @@
+#pragma once
 
-#include "PCH.hpp"
+#include <QDialog>
+#include <QPainter>
+#include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QGraphicsDropShadowEffect>
 
-#include "Headers/GraphView.hpp"
+#include <QDebug>
+#include "GraphView.h"
 
 #include <QWheelEvent>
 
@@ -14,7 +20,8 @@ GraphView::GraphView(QWidget* pParent)
 {
     QGraphicsView::setRenderHints(QPainter::Antialiasing);
     QGraphicsView::setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-    QGraphicsView::setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    QGraphicsView::setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+//  QGraphicsView::setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 }
 
 void GraphView::drawBackground(QPainter* pPainter, const QRectF& rRect)
@@ -45,18 +52,18 @@ void GraphView::wheelEvent(QWheelEvent* pEvent)
     qreal inFactor = 1.25;
     qreal outFactor = 1 / inFactor;
 
-    auto oldPos = QGraphicsView::mapToScene(pEvent->pos());
+    auto oldPos = pEvent->position();
 
     qreal zoomFactor;
 
-    if (pEvent->delta() > 0)
+    if (pEvent->angleDelta().y() > 0)
         zoomFactor = inFactor;
     else
         zoomFactor = outFactor;
 
     QGraphicsView::scale(zoomFactor, zoomFactor);
 
-    auto newPos = QGraphicsView::mapToScene(pEvent->pos());
+    auto newPos = pEvent->position();
     auto delta = newPos - oldPos;
 
     QGraphicsView::translate(delta.x(), delta.y());

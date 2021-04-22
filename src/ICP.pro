@@ -9,12 +9,20 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    GraphGizmo.cpp \
+    GraphNode.cpp \
+    GraphNodeSlot.cpp \
+    GraphView.cpp \
     helpdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     mainwindoweditor.cpp
 
 HEADERS += \
+    GraphGizmo.h \
+    GraphNode.h \
+    GraphNodeSlot.h \
+    GraphView.h \
     helpdialog.h \
     mainwindow.h \
     mainwindoweditor.h

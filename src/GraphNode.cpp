@@ -1,8 +1,14 @@
 
-#include "PCH.hpp"
+#include <QDialog>
 
-#include "Headers/GraphNode.hpp"
-#include "Headers/GraphNodeSlot.hpp"
+#include <QPainter>
+#include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QGraphicsDropShadowEffect>
+
+#include <QDebug>
+#include "GraphNode.h"
+#include "GraphNodeSlot.h"
 
 const QColor GraphNode::BackgroundColor = QColor(30, 30, 30);
 const QColor GraphNode::BorderColorDefault = QColor(9, 9, 9);
@@ -23,7 +29,7 @@ GraphNode::GraphNode(const QString& rName, const QPointF& rPosition)
     QGraphicsItem::setGraphicsEffect(&mShadowEffect);
 }
 
-GraphNodeSlot* GraphNode::AddInputPort(GraphPortDataType type)
+void GraphNode::AddInputPort(GraphPortDataType type)
 {
     Q_ASSERT(QGraphicsItem::scene());
 
@@ -35,11 +41,9 @@ GraphNodeSlot* GraphNode::AddInputPort(GraphPortDataType type)
 //  QGraphicsItem::scene()->addItem(pItem);
 
     mInputPorts.append(pItem);
-
-    return pItem;
 }
 
-GraphNodeSlot* GraphNode::AddOutputPort(GraphPortDataType type)
+void GraphNode::AddOutputPort(GraphPortDataType type)
 {
     Q_ASSERT(QGraphicsItem::scene());
 
@@ -51,8 +55,6 @@ GraphNodeSlot* GraphNode::AddOutputPort(GraphPortDataType type)
 //  QGraphicsItem::scene()->addItem(pItem);
 
     mOutputPorts.append(pItem);
-
-    return pItem;
 }
 
 QRectF GraphNode::boundingRect() const

@@ -10,8 +10,8 @@ class GraphNode : public QGraphicsItem
 public:
     GraphNode(const QString& rName, const QPointF& rPosition);
 
-    GraphNodeSlot* AddInputPort(GraphPortDataType type);
-    GraphNodeSlot* AddOutputPort(GraphPortDataType type);
+    void AddInputPort(GraphPortDataType type);
+    void AddOutputPort(GraphPortDataType type);
 
     QRectF boundingRect() const override;
 

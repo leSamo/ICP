@@ -3,6 +3,7 @@
 
 // Forward declarations.
 class GraphNode;
+class GraphLine;
 class GraphGizmo;
 
 enum class GraphPortDataType
@@ -21,12 +22,7 @@ public:
         Output
     };
 
-    GraphNodeSlot(GraphNode* pParentNode, GraphPortDataType dataType, IOType ioType, int index);
-
-    void AddConnection(GraphNodeSlot* pDstPort);
-
-    void AddInputGizmo(GraphGizmo* pGizmo);
-    void AddOutputGizmo(GraphGizmo* pGizmo);
+    GraphNodeSlot(GraphNode* pParentNode, GraphPortDataType dataType, IOType ioType, int index, bool isGhost = false);
 
     static GraphPortDataType DataTypeFromString(const QString& rStr);
 
@@ -37,16 +33,10 @@ public:
     QRectF boundingRect() const override;
 
     bool IsIOType(IOType e) const { return mIOType == e; }
-    bool IsDataType(GraphPortDataType e) const { return mDataType == e; }
 
     auto GetDataType() const    { return mDataType; }
     auto GetIOType() const      { return mIOType;   }
-    auto GetIndex() const       { return mIndex;    }
-    auto GetColor() const       { return mColor;    }   
-
- 
-    const auto& GetInputGizmos() const  { return mGizmosIn;  }
-    const auto& GetOutputGizmos() const { return mGizmosOut; }
+    auto GetColor() const       { return mColor;    }
 
 protected:
 
@@ -60,8 +50,7 @@ private:
 
     GraphNodeSlot* FindClosestPort();
 
-    void ConnectToPort(GraphNodeSlot* pDstPort, GraphGizmo* pGizmo);
-    void CreateGhostPort(IOType inputType, const QPointF& rScenePos);
+    void ConnectToPort(GraphNodeSlot* pDstPort);
 
 private:
 
@@ -70,10 +59,21 @@ private:
     const GraphPortDataType mDataType;
     const IOType            mIOType;
     const int               mIndex;
+    const bool              mIsGhost;
     const QColor            mColor;
 
-    QVector<GraphGizmo*>    mGizmosIn;
-    QVector<GraphGizmo*>    mGizmosOut;
+    // A single src "port" might be connected to the multiple dst ports. 
+ //   QVector<GraphNodeSlot*> mConnectedDstPorts;
+    QVector<GraphNodeSlot*> mConnectedSrcPorts;
+    
+    QVector<GraphLine*> mGizmosIn;
+    QVector<GraphLine*> mGizmosOut;
+    GraphLine* mpNewLine = nullptr;
+
+
+    QPointF                 mMousePressedPos;
+
+    GraphNodeSlot* mpTempPort = nullptr;
 
     GraphNodeSlot*          mpClosestPort   = nullptr;
     GraphNodeSlot*          mpGhostPort     = nullptr; // A temporary "port" object that will be used while mouse dragging the port to the destination.
