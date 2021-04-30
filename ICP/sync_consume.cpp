@@ -39,17 +39,18 @@
 
 using namespace std;
 
-const string SERVER_ADDRESS	{ "test.mosquitto.org:1883" };
+//const string SERVER_ADDRESS	{ "test.mosquitto.org:1883" };
 const string CLIENT_ID		{ "xoleksxfindr" };
-const string TOPIC 			{ "xoleksxfindr/#" };
+// const string topic      	{ "xoleksxfindr/#" };
 
 const int QOS = 2;
 
 /////////////////////////////////////////////////////////////////////////////
 
-int sync_consume()
+int sync_consume(string server, string topic)
 {
-    mqtt::async_client cli(SERVER_ADDRESS, CLIENT_ID);
+    cout << server << topic << endl;
+    mqtt::async_client cli(server, CLIENT_ID);
 
     auto connOpts = mqtt::connect_options_builder()
         .finalize();
@@ -72,7 +73,7 @@ int sync_consume()
         // there is a session, then the server remembers us and our
         // subscriptions.
         if (!rsp.is_session_present())
-            cli.subscribe(TOPIC, QOS)->wait();
+            cli.subscribe(topic, QOS)->wait();
 
         cout << "OK" << endl;
 
@@ -80,7 +81,7 @@ int sync_consume()
         // This just exits if the client is disconnected.
         // (See some other examples for auto or manual reconnect)
 
-        cout << "Waiting for messages on topic: '" << TOPIC << "'" << endl;
+        cout << "Waiting for messages on topic: '" << topic << "'" << endl;
 
         while(true) {
             auto msg = cli.consume_message();
@@ -93,7 +94,7 @@ int sync_consume()
 
         if (cli.is_connected()) {
             cout << "\nShutting down and disconnecting from the MQTT server..." << flush;
-            cli.unsubscribe(TOPIC)->wait();
+            cli.unsubscribe(topic)->wait();
             cli.stop_consuming();
             cli.disconnect()->wait();
             cout << "OK" << endl;

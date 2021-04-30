@@ -6,11 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    sync_consume();
     ui->setupUi(this);
-
-    ui->treeWidget->setColumnCount(2);
-    AddRoot("hello", "world");
 }
 
 MainWindow::~MainWindow()
@@ -26,8 +22,8 @@ void MainWindow::AddRoot(QString name, QString desc) {
 
     ui->treeWidget->addTopLevelItem(itm);
 
-    AddChild(itm, "ahoj", "ahojky");
-    AddChild(itm, "kamo", "cau");
+    //AddChild(itm, "ahoj", "ahojky");
+    //AddChild(itm, "kamo", "cau");
 }
 
 void MainWindow::AddChild(QTreeWidgetItem *parent, QString name, QString desc) {
@@ -36,4 +32,13 @@ void MainWindow::AddChild(QTreeWidgetItem *parent, QString name, QString desc) {
     itm->setText(1, desc);
 
     parent->addChild(itm);
+}
+
+void MainWindow::on_btnConnect_clicked()
+{
+    QString server = ui->inputServer->toPlainText();
+    QString topic = ui->inputTopic->toPlainText();
+
+    AddRoot(topic, "");
+    sync_consume(server.toUtf8().constData(), topic.toUtf8().constData());
 }
