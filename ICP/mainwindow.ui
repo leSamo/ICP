@@ -91,7 +91,7 @@
      </font>
     </property>
     <property name="text">
-     <string>[topic name]</string>
+     <string>Disconnected</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

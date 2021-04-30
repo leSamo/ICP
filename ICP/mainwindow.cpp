@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "sync_consume.h"
+#include "async_consume.h"
+#include <thread>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,7 +14,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
 
 void MainWindow::AddRoot(QString name, QString desc) {
     QTreeWidgetItem *itm = new QTreeWidgetItem(ui->treeWidget);
@@ -38,7 +38,15 @@ void MainWindow::on_btnConnect_clicked()
 {
     QString server = ui->inputServer->toPlainText();
     QString topic = ui->inputTopic->toPlainText();
+    ui->txtTitle->setText(topic);
 
     AddRoot(topic, "");
-    sync_consume(server.toUtf8().constData(), topic.toUtf8().constData());
+
+    if (isConnected()) {
+        disconnect();
+    }
+
+    setTopic(topic.toUtf8().constData());
+
+    async_consume(server.toUtf8().constData());
 }

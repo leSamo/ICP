@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+CONFIG += c++17
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,10 +15,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    sync_consume.cpp
+    async_consume.cpp
 
 HEADERS  += mainwindow.h \
-    sync_consume.h
+    async_consume.h
 
 FORMS    += mainwindow.ui
 
