@@ -28,8 +28,13 @@ public:
 private slots:
     void on_btnConnect_clicked();
 
+    void on_btnAdd_item_clicked();
+
 private:
     Ui::MainWindow *ui;
+    int Rows = 0;
+    int Cols = 0;
+    int Count = 0;
 };
 
 #endif // MAINWINDOW_H

@@ -50,3 +50,20 @@ void MainWindow::on_btnConnect_clicked()
 
     async_consume(server.toUtf8().constData());
 }
+
+void MainWindow::on_btnAdd_item_clicked()
+{
+    QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
+    if (Rows >= 5){
+        Rows = 0;
+        Cols++;
+    }
+    if (Count <= 14){
+        // insert created dash element, placeholder button
+        QPushButton* button = new QPushButton("buttontext");
+        layout->addWidget(button, Rows, Cols);
+        Rows++;
+        Count++;
+    }
+
+}
