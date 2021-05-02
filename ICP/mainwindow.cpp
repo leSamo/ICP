@@ -59,8 +59,13 @@ void MainWindow::on_btnAdd_item_clicked()
         Cols++;
     }
     if (Count <= 14){
-        // insert created dash element, placeholder button
-        QPushButton* button = new QPushButton("buttontext");
+        // insert created dash element
+        QString str = ui->dash_name->toPlainText();
+
+        // TODO: value check
+
+        str.append("\nvalue:");
+        QPushButton* button = new QPushButton(str);
         layout->addWidget(button, Rows, Cols);
         Rows++;
         Count++;

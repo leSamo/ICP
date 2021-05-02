@@ -6,120 +6,115 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1236</width>
-    <height>628</height>
+    <width>1213</width>
+    <height>616</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTreeWidget" name="treeWidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>70</y>
-      <width>531</width>
-      <height>471</height>
+      <y>10</y>
+      <width>1191</width>
+      <height>71</height>
      </rect>
     </property>
-    <column>
-     <property name="text">
-      <string>Topic</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Last message</string>
-     </property>
-    </column>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,0">
+     <item>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QPlainTextEdit" name="inputServer">
+         <property name="plainText">
+          <string>test.mosquitto.org:1883</string>
+         </property>
+         <property name="placeholderText">
+          <string>Server address and port</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="btnConnect">
+         <property name="text">
+          <string>Connect to server</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPlainTextEdit" name="inputTopic">
+         <property name="plainText">
+          <string>xoleksxfindr/#</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="txtTitle">
+         <property name="font">
+          <font>
+           <pointsize>16</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Disconnected</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="btnAdd_item">
+         <property name="text">
+          <string>Add dash item</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="dash_name">
+         <property name="plainText">
+          <string>Name of dash element</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </widget>
-   <widget class="QPushButton" name="btnConnect">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>40</y>
-      <width>181</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Connect to server</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="inputServer">
+   <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>0</y>
-      <width>251</width>
-      <height>31</height>
+      <y>100</y>
+      <width>1191</width>
+      <height>451</height>
      </rect>
     </property>
-    <property name="plainText">
-     <string>test.mosquitto.org:1883</string>
-    </property>
-    <property name="placeholderText">
-     <string>Server address and port</string>
-    </property>
-   </widget>
-   <widget class="QPlainTextEdit" name="inputTopic">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>251</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="plainText">
-     <string>xoleksxfindr/#</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="txtTitle">
-    <property name="geometry">
-     <rect>
-      <x>450</x>
-      <y>20</y>
-      <width>301</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Disconnected</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnAdd_item">
-    <property name="geometry">
-     <rect>
-      <x>740</x>
-      <y>30</y>
-      <width>181</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Add dash item</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>70</y>
-      <width>601</width>
-      <height>471</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="dash_g"/>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
+     <item>
+      <widget class="QTreeWidget" name="treeWidget">
+       <column>
+        <property name="text">
+         <string>Topic</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Last message</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+     <item>
+      <layout class="QGridLayout" name="dash_g"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -127,20 +122,30 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1236</width>
+     <width>1213</width>
      <height>24</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
+   <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+    <addaction name="actionHelp"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
