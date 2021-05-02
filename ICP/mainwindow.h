@@ -9,6 +9,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <QTreeWidget>
+#include"helpdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -30,11 +31,13 @@ private slots:
 
     void on_btnAdd_item_clicked();
 
+    void on_actionHelp_triggered();
+
+    void onRemove();
+
 private:
     Ui::MainWindow *ui;
-    int Rows = 0;
-    int Cols = 0;
-    int Count = 0;
+    HelpDialog *help;
 };
 
 #endif // MAINWINDOW_H

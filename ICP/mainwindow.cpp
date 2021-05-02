@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include "async_consume.h"
 #include <thread>
+#include "helpdialog.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -53,22 +55,42 @@ void MainWindow::on_btnConnect_clicked()
 
 void MainWindow::on_btnAdd_item_clicked()
 {
+
     QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
-    if (Rows >= 5){
-        Rows = 0;
-        Cols++;
-    }
-    if (Count <= 14){
-        // insert created dash element
+
+
+         // TODO: value check
+
         QString str = ui->dash_name->toPlainText();
-
-        // TODO: value check
-
         str.append("\nvalue:");
         QPushButton* button = new QPushButton(str);
-        layout->addWidget(button, Rows, Cols);
-        Rows++;
-        Count++;
+
+        for (int x = 0; x < 5;x++){
+            for (int y = 0; y < 3; y++){
+                if (layout->itemAtPosition(x,y) == 0){
+                    layout->addWidget(button, x, y);
+                }
+            }
+        }
+
+
+        QObject::connect(
+                    button, &QPushButton::clicked,
+                    this, &MainWindow::onRemove);
     }
 
+
+
+
+
+void MainWindow::onRemove(){
+    QPushButton* button = qobject_cast<QPushButton*>(sender());
+    delete button;
+
+}
+
+void MainWindow::on_actionHelp_triggered()
+{
+    help = new HelpDialog(this);
+    help->show();
 }

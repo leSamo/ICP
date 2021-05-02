@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>1191</width>
-      <height>71</height>
+      <height>81</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,0">
@@ -130,6 +130,7 @@
     <property name="title">
      <string>Menu</string>
     </property>
+    <addaction name="separator"/>
     <addaction name="actionHelp"/>
     <addaction name="actionAbout"/>
    </widget>
@@ -137,6 +138,9 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionHelp">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Help</string>
    </property>

@@ -15,12 +15,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    async_consume.cpp
+    async_consume.cpp \
+    helpdialog.cpp
 
 HEADERS  += mainwindow.h \
-    async_consume.h
+    async_consume.h \
+    helpdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    helpdialog.ui
 
 LIBS += -lpaho-mqttpp3 -lpaho-mqtt3as
 
