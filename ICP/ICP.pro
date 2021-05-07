@@ -16,11 +16,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     async_consume.cpp \
-    helpdialog.cpp
+    helpdialog.cpp \
+    callback.cpp \
+    actionlistener.cpp
 
 HEADERS  += mainwindow.h \
     async_consume.h \
-    helpdialog.h
+    helpdialog.h \
+    callback.h \
+    actionlistener.h
 
 FORMS    += mainwindow.ui \
     helpdialog.ui

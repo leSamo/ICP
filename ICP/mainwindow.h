@@ -4,23 +4,24 @@
 #include <QMainWindow>
 #include "mqtt/properties.h"
 #include "mqtt/async_client.h"
+#include "callback.h"
 
 #include <QDialog>
 #include <QtCore>
 #include <QtGui>
 #include <QTreeWidget>
-#include"helpdialog.h"
+#include "helpdialog.h"
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-void AddRoot(QString name, QString desc);
-void AddChild(QTreeWidgetItem *parent, QString name, QString desc);
+QTreeWidgetItem* AddRoot(QString name, QString desc);
+QTreeWidgetItem* AddChild(QTreeWidgetItem *parent, QString name, QString desc);
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -28,16 +29,16 @@ public:
 
 private slots:
     void on_btnConnect_clicked();
-
     void on_btnAdd_item_clicked();
-
     void on_actionHelp_triggered();
-
     void onRemove();
 
 private:
     Ui::MainWindow *ui;
     HelpDialog *help;
+
+public slots:
+    void DisplayMsg(QString topic, QString msg);
 };
 
 #endif // MAINWINDOW_H
