@@ -1,5 +1,8 @@
 #include "callback.h"
 
+const int N_RETRY_ATTEMPTS = 5;
+const int QOS = 2;
+
 // This deomonstrates manually reconnecting to the broker by calling
 // connect() again. This is a possibility for an application that keeps
 // a copy of it's original connect_options, or if the app wants to
@@ -20,7 +23,7 @@ void callback::reconnect() {
 // Re-connection failure
 void callback::on_failure(const mqtt::token& tok) {
     std::cout << "Connection attempt failed" << std::endl;
-    if (++nretry_ > 5)
+    if (++nretry_ > N_RETRY_ATTEMPTS)
         exit(1);
     reconnect();
 }
@@ -34,7 +37,7 @@ void callback::connected(const std::string& cause) {
     std::cout << "\nConnection success" << std::endl;
     std::cout << "\nSubscribing \n"
         << "\tfor client " << "CLIENT_ID"
-        << " using QoS" << "QOS" << "\n"
+        << " using QoS" << QOS << "\n"
         << "\nPress Q<Enter> to quit\n" << std::endl;
 
     cli_.subscribe("xoleksxfindr/#", 2, nullptr, subListener_);

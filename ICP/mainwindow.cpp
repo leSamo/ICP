@@ -7,10 +7,7 @@
 #include <QDebug>
 #include "mqtt/async_client.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
 }
 
@@ -19,6 +16,13 @@ MainWindow::~MainWindow() {
 }
 
 QTreeWidgetItem* MainWindow::AddRoot(QString name, QString desc) {
+    // if element with the same name exists dont create a new one
+    QList<QTreeWidgetItem*> clist = ui->treeWidget->findItems(name, Qt::MatchContains|Qt::MatchRecursive, 0);
+
+    if (clist.size() > 0) {
+        return clist[0];
+    }
+
     QTreeWidgetItem *itm = new QTreeWidgetItem(ui->treeWidget);
     itm->setText(0, name);
     itm->setText(1, desc);
@@ -49,7 +53,6 @@ void MainWindow::on_btnConnect_clicked() {
         disconnect();
     }
 */
-    setTopic(topic.toUtf8().constData());
 
     callback *eventCallback;
     mqtt::async_client *mqttClient = nullptr;
@@ -66,8 +69,8 @@ void MainWindow::on_btnConnect_clicked() {
                 eventCallback, &callback::DisplayMsg,
                 this, &MainWindow::DisplayMsg);
 
-    //std::cout << "Listening to topic: " << topic << std::endl;
-    //std::cout << "Connecting" << std::endl;
+    std::cout << "Listening to topic: " << topic.toUtf8().constData() << std::endl;
+    std::cout << "Connecting" << std::endl;
 
     try {
         (*mqttClient).connect(*connectionOptions, nullptr, *eventCallback);
@@ -78,54 +81,45 @@ void MainWindow::on_btnConnect_clicked() {
 
 }
 
-void MainWindow::on_btnAdd_item_clicked()
-{
-
+void MainWindow::on_btnAdd_item_clicked() {
     QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
 
+    // TODO: value check
 
-        // TODO: value check
+    QString str = ui->dash_name->toPlainText();
+    str.append("\nvalue:");
+    QPushButton* button = new QPushButton(str);
 
-        QString str = ui->dash_name->toPlainText();
-        str.append("\nvalue:");
-        QPushButton* button = new QPushButton(str);
-
-        for (int x = 0; x < 5;x++){
-            for (int y = 0; y < 3; y++){
-                if (layout->itemAtPosition(x,y) == 0){
-                    layout->addWidget(button, x, y);
-                }
+    for (int x = 0; x < 5;x++){
+        for (int y = 0; y < 3; y++){
+            if (layout->itemAtPosition(x,y) == 0){
+                layout->addWidget(button, x, y);
             }
         }
+    }
 
-
-        QObject::connect(
-                    button, &QPushButton::clicked,
-                    this, &MainWindow::onRemove);
+    QObject::connect(
+                button, &QPushButton::clicked,
+                this, &MainWindow::onRemove);
 }
 
-void MainWindow::onRemove(){
+void MainWindow::onRemove() {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     delete button;
-
 }
 
-void MainWindow::on_actionHelp_triggered()
-{
+void MainWindow::on_actionHelp_triggered() {
     help = new HelpDialog(this);
     help->show();
 }
 
 void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
-    std::string topic = Qtopic.toUtf8().constData();
-    std::string msg = Qmsg.toUtf8().constData();
-
-    std::cout << "msg:" << msg;
-    std::stringstream test(topic);
+    // split topic name on '/' character
+    std::stringstream test(Qtopic.toUtf8().constData());
     std::string segment;
     std::vector<std::string> seglist;
 
-    while(std::getline(test, segment, '_'))
+    while(std::getline(test, segment, '/'))
     {
        seglist.push_back(segment);
     }

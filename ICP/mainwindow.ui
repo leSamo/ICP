@@ -29,7 +29,7 @@
        <item row="0" column="0">
         <widget class="QPlainTextEdit" name="inputServer">
          <property name="plainText">
-          <string>test.mosquitto.org:1883</string>
+          <string>broker.emqx.io:1883</string>
          </property>
          <property name="placeholderText">
           <string>Server address and port</string>

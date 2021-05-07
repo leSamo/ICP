@@ -12,7 +12,4 @@ bool isConnected();
 void setTopic(std::string newTopic);
 QMainWindow* getMainWindow();
 
-void DisplayMsg(std::string, std::string);
-
-
 #endif // ASYNC_CONSUME_H

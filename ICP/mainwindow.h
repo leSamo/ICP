@@ -16,12 +16,11 @@ namespace Ui {
     class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
-QTreeWidgetItem* AddRoot(QString name, QString desc);
-QTreeWidgetItem* AddChild(QTreeWidgetItem *parent, QString name, QString desc);
+    QTreeWidgetItem* AddRoot(QString name, QString desc);
+    QTreeWidgetItem* AddChild(QTreeWidgetItem *parent, QString name, QString desc);
 
 public:
     explicit MainWindow(QWidget *parent = 0);

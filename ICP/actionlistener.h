@@ -4,8 +4,7 @@
 #include "mqtt/properties.h"
 #include "mqtt/async_client.h"
 
-class action_listener : public virtual mqtt::iaction_listener
-{
+class action_listener : public virtual mqtt::iaction_listener {
 public:
     action_listener(const std::string& name) : name_(name) {}
 private:

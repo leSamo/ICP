@@ -39,7 +39,7 @@ private:
 
 public:
     callback(mqtt::async_client& cli, mqtt::connect_options& connOpts)
-                : nretry_(0), cli_(cli), connOpts_(connOpts), subListener_("Subscription") {}
+        : nretry_(0), cli_(cli), connOpts_(connOpts), subListener_("Subscription") {}
 signals:
     void DisplayMsg(QString topic, QString msg);
 };
