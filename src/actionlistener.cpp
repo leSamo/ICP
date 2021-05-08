@@ -1,3 +1,8 @@
+/*!
+ * \file actionlistener.cpp
+ * authors: Samuel Olekšák, Michal Findra
+ */
+
 #include "actionlistener.h"
 
 void action_listener::on_failure(const mqtt::token& tok) {

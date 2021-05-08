@@ -1,3 +1,9 @@
+/*!
+ * \author Samuel Olekšák
+ * \author Michal Findra
+ * \date 2021-8-5
+ */
+
 #include "callback.h"
 
 const int N_RETRY_ATTEMPTS = 5;
@@ -9,17 +15,6 @@ const int QOS = 2;
 // reconnect with different options.
 // Another way this can be done manually, if using the same options, is
 // to just call the async_client::reconnect() method.
-void callback::reconnect() {
-    std::this_thread::sleep_for(std::chrono::milliseconds(2500));
-    try {
-        cli_.connect(connOpts_, nullptr, *this);
-    }
-    catch (const mqtt::exception& exc) {
-        std::cerr << "Error: " << exc.what() << std::endl;
-        exit(1);
-    }
-}
-
 // Re-connection failure
 void callback::on_failure(const mqtt::token& tok) {
     std::cout << "Connection attempt failed" << std::endl;

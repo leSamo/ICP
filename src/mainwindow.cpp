@@ -15,6 +15,12 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+/*!
+* Adds item to treeWidget element on root level
+* \param[in] name first column content - topic name
+* \param[in] desc second column content - last message received
+* \return newly created root level item
+*/
 QTreeWidgetItem* MainWindow::AddRoot(QString name, QString desc) {
     // if element with the same name exists dont create a new one
     QList<QTreeWidgetItem*> clist = ui->treeWidget->findItems(name, Qt::MatchContains|Qt::MatchRecursive, 0);
@@ -32,6 +38,13 @@ QTreeWidgetItem* MainWindow::AddRoot(QString name, QString desc) {
     return itm;
 }
 
+/*!
+* Attach new item to treeWidget element as child
+* \param[in] parent treeWidget item to which the new item should be attached to
+* \param[in] name first column content - topic name
+* \param[in] desc second column content - last message received
+* \return newly created treeWidget item
+*/
 QTreeWidgetItem* MainWindow::AddChild(QTreeWidgetItem *parent, QString name, QString desc) {
     QTreeWidgetItem *itm = new QTreeWidgetItem();
     itm->setText(0, name);
