@@ -6,94 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1213</width>
-    <height>616</height>
+    <width>1212</width>
+    <height>615</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>1191</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,0">
-     <item>
-      <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0">
-        <widget class="QPlainTextEdit" name="inputServer">
-         <property name="plainText">
-          <string>broker.emqx.io:1883</string>
-         </property>
-         <property name="placeholderText">
-          <string>Server address and port</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="btnConnect">
-         <property name="text">
-          <string>Connect to server</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QPlainTextEdit" name="inputTopic">
-         <property name="plainText">
-          <string>xoleksxfindr/#</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="txtTitle">
-         <property name="font">
-          <font>
-           <pointsize>16</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Disconnected</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QPushButton" name="btnAdd_item">
-         <property name="text">
-          <string>Add dash item</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPlainTextEdit" name="dash_name">
-         <property name="plainText">
-          <string>Name of dash element</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
    <widget class="QWidget" name="horizontalLayoutWidget_2">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>100</y>
+      <y>110</y>
       <width>1191</width>
-      <height>451</height>
+      <height>441</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1">
@@ -116,14 +43,136 @@
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="btnAdd_item">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>60</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add dash item</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="txtTitle">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>60</y>
+      <width>191</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Disconnected</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnConnect">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>10</y>
+      <width>191</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Connect to server</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="inputServer">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>231</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="plainText">
+     <string>broker.emqx.io:1883</string>
+    </property>
+    <property name="placeholderText">
+     <string>Server address and port</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="inputTopic">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>231</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="plainText">
+     <string>xoleksxfindr/#</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="dash_name">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>10</y>
+      <width>231</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="plainText">
+     <string>Name of dash element</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="dash_topic">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>60</y>
+      <width>231</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="plainText">
+     <string>Topic</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>10</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <zorder>horizontalLayoutWidget_2</zorder>
+   <zorder>btnAdd_item</zorder>
+   <zorder>btnAdd_item</zorder>
+   <zorder>txtTitle</zorder>
+   <zorder>btnConnect</zorder>
+   <zorder>inputServer</zorder>
+   <zorder>inputTopic</zorder>
+   <zorder>dash_name</zorder>
+   <zorder>dash_topic</zorder>
+   <zorder>comboBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1213</width>
-     <height>24</height>
+     <width>1212</width>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">

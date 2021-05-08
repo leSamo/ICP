@@ -86,14 +86,41 @@ void MainWindow::on_btnAdd_item_clicked() {
 
     // TODO: value check
 
-    QString str = ui->dash_name->toPlainText();
-    str.append("\nvalue:");
-    QPushButton* button = new QPushButton(str);
+    QWidget* wdg = new QWidget();
+    wdg->setStyleSheet( "QWidget{ background-color : rgba( 160, 160, 160, 255); border-radius : 3px;  }");
+    wdg->setFixedSize(QSize(300, 80));
+    QLabel *label_name = new QLabel(wdg);
+    QLabel *label_topic = new QLabel(wdg);
+    QLabel *label_type = new QLabel(wdg);
 
-    for (int x = 0; x < 5;x++){
-        for (int y = 0; y < 3; y++){
+    QString str_name = "Name: " + ui->dash_name->toPlainText();
+    QString str_topic = "Topic: " + ui->dash_topic->toPlainText();
+    QString str_type = "Type: ";
+
+
+    label_name->setText(str_name);
+    label_topic->setText(str_topic);
+    label_type->setText(str_type);
+
+    QVBoxLayout *layout2 = new QVBoxLayout();
+    QHBoxLayout *layout3 = new QHBoxLayout();
+
+    wdg->setLayout(layout3);
+    layout2->addWidget(label_name);
+    layout2->addWidget(label_topic);
+    layout2->addWidget(label_type);
+
+    QPushButton* button = new QPushButton("X");
+    button->setFixedSize(QSize(50, 50));
+    button->setStyleSheet("background-color : rgba( 100, 100, 100, 255); ");
+
+    layout3->addItem(layout2);
+    layout3->addWidget(button);
+
+    for (int y = 0; y < 2; y++){
+        for (int x = 0; x < 5;x++){
             if (layout->itemAtPosition(x,y) == 0){
-                layout->addWidget(button, x, y);
+                layout->addWidget(wdg, x, y);
             }
         }
     }
@@ -105,7 +132,7 @@ void MainWindow::on_btnAdd_item_clicked() {
 
 void MainWindow::onRemove() {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
-    delete button;
+    delete button->parent();
 }
 
 void MainWindow::on_actionHelp_triggered() {
