@@ -18,16 +18,20 @@ SOURCES += main.cpp\
     async_consume.cpp \
     helpdialog.cpp \
     callback.cpp \
-    actionlistener.cpp
+    actionlistener.cpp \
+    topicdialog.cpp
 
 HEADERS  += mainwindow.h \
     async_consume.h \
     helpdialog.h \
     callback.h \
-    actionlistener.h
+    actionlistener.h \
+    topicdialog.h \
+    message.h
 
 FORMS    += mainwindow.ui \
-    helpdialog.ui
+    helpdialog.ui \
+    topicdialog.ui
 
 LIBS += -lpaho-mqttpp3 -lpaho-mqtt3as
 

@@ -64,8 +64,14 @@ void callback::connection_lost(const std::string& cause) {
 
 // Callback for when a message arrives.
 void callback::message_arrived(mqtt::const_message_ptr msg) {
-    emit DisplayMsg(QString::fromStdString(msg->get_topic()), QString::fromStdString(msg->to_string()));
+    std::string content = msg->get_topic();
+
+    if (content.back() == '/') {
+        content.pop_back();
+    }
+
+    emit DisplayMsg(QString::fromStdString(content), QString::fromStdString(msg->to_string()));
     std::cout << "Message arrived" << std::endl;
-    std::cout << "\ttopic: '" << msg->get_topic() << "'" << std::endl;
+    std::cout << "\ttopic: '" << content << "'" << std::endl;
     std::cout << "\tpayload: '" << msg->to_string() << "'\n" << std::endl;
 }

@@ -4,12 +4,15 @@
 #include "async_consume.h"
 #include <thread>
 #include "helpdialog.h"
+#include "topicdialog.h"
 #include <QDebug>
 #include "mqtt/async_client.h"
 #include <chrono>
 #include <iomanip>
 using namespace std;
 using namespace chrono;
+
+#define MAX_MSG_COUNT 1000
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -18,6 +21,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->treeWidget->setColumnHidden(3, true);
     ui->treeWidget->setColumnWidth(0, 200);
     ui->treeWidget->setColumnWidth(1, 200);
+
+    // setup tree widget on click event handler
+    connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+            this, SLOT(on_treewidget_clicked(QTreeWidgetItem*, int)));
 }
 
 MainWindow::~MainWindow() {
@@ -196,6 +203,13 @@ void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
     QString QcurrentTime = QString::fromStdString(ss.str());
     ss.str("");
 
+    msg newMsg = { Qtopic, Qmsg, QcurrentTime };
+    msgs.push_front(newMsg);
+
+    if (msgs.size() > MAX_MSG_COUNT) {
+        msgs.pop_back();
+    }
+
     while(std::getline(test, segment, '/'))
     {
        seglist.push_back(segment);
@@ -211,6 +225,7 @@ void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
     for (int i = 1; i < seglist.size(); i++) {
         copy(seglist.begin(),seglist.begin() + i + 1, ostream_iterator<string>(ss,"/"));
         string path = ss.str();
+        path.pop_back(); // remove trailing '/'
 
         if (i == seglist.size() - 1) {
             parent = MainWindow::AddChild(parent, QString::fromStdString(seglist[i]), Qmsg, QcurrentTime, QString::fromStdString(path));
@@ -219,4 +234,21 @@ void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
             parent = MainWindow::AddChild(parent, QString::fromStdString(seglist[i]), "", "", QString::fromStdString(path));
         }
     }
+}
+
+void MainWindow::on_treewidget_clicked(QTreeWidgetItem *item, int column) {
+    cout << "Show history for " << item->text(3).toUtf8().constData() << endl;
+
+    QString topic = item->text(3);
+
+    TopicDialog *topicDialog = new TopicDialog(this);
+
+    topicDialog->show();
+    topicDialog->setTitle(topic);
+
+    cout << topic.toUtf8().constData() << " vs " << msgs[0].topic.toUtf8().constData() << endl;
+
+    std::deque<msg> filteredMsgs;
+    std::copy_if(msgs.begin(), msgs.end(), std::back_inserter(filteredMsgs), [topic](msg message){return message.topic == topic;});
+    topicDialog->setMsgs(filteredMsgs);
 }

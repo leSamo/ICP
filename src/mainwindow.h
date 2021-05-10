@@ -11,6 +11,8 @@
 #include <QtGui>
 #include <QTreeWidget>
 #include "helpdialog.h"
+#include <deque>
+#include "message.h"
 
 namespace Ui {
     class MainWindow;
@@ -35,9 +37,12 @@ private slots:
 private:
     Ui::MainWindow *ui;
     HelpDialog *help;
+    std::deque<msg> msgs;
+
 
 public slots:
     void DisplayMsg(QString topic, QString msg);
+    void on_treewidget_clicked(QTreeWidgetItem *item, int column);
 };
 
 #endif // MAINWINDOW_H
