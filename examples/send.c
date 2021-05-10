@@ -6,7 +6,7 @@
 
 #define BASE_TOPIC "xoleksxfindr/"
 #define MAX_MSG_LENGTH 20
-#define BROKER_ADDRESS "test.mosquitto.org"
+#define BROKER_ADDRESS "broker.emqx.io"
 #define BROKER_PORT 1883
 
 void onConnectionAckReceive(struct mosquitto *mosq, void *obj, int reason_code)

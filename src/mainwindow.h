@@ -23,7 +23,7 @@ class MainWindow : public QMainWindow {
 
     QTreeWidgetItem* AddRoot(QString name, QString desc, QString time, QString path);
     QTreeWidgetItem* AddChild(QTreeWidgetItem *parent, QString name, QString desc, QString time, QString path);
-
+    void AddToDash(QString desc, QString topic);
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();

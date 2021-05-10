@@ -59,6 +59,7 @@ QTreeWidgetItem* MainWindow::AddRoot(QString name, QString desc, QString time, Q
     return newItem;
 }
 
+
 /*!
 * Attach new item to treeWidget element as child
 * \param[in] parent treeWidget item to which the new item should be attached to
@@ -88,6 +89,26 @@ QTreeWidgetItem* MainWindow::AddChild(QTreeWidgetItem *parent, QString name, QSt
 
     return newItem;
 }
+
+/*!
+* Update value in dash panel if panel for subscribed topic exists
+* \param[in] desc
+* \param[in] topic
+*/
+void MainWindow::AddToDash(QString desc, QString topic){
+    QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
+    for (int y = 0; y < 2; y++){
+        for (int x = 0; x < 5;x++){
+            if (layout->itemAtPosition(x,y) != 0){
+                QList<QLabel *> labels = layout->itemAtPosition(x,y)->widget()->findChildren<QLabel *>();
+                if (QString::compare( labels[1]->text() ,("Topic: " + topic)) == 0){
+                   labels[2]->setText("Value: "+ desc);
+                }
+            }
+        }
+    }
+}
+
 
 const std::string CLIENT_ID { "xoleksxfindr" };
 
@@ -130,8 +151,6 @@ void MainWindow::on_btnConnect_clicked() {
 
 void MainWindow::on_btnAdd_item_clicked() {
     QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
-
-    // TODO: value check
 
     QWidget* wdg = new QWidget();
     wdg->setStyleSheet( "QWidget{ background-color : rgba( 160, 160, 160, 255); border-radius : 3px;  }");
@@ -232,8 +251,10 @@ void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
         }
         else {
             parent = MainWindow::AddChild(parent, QString::fromStdString(seglist[i]), "", "", QString::fromStdString(path));
-        }
+        }        
     }
+
+    MainWindow::AddToDash(Qmsg, Qtopic);
 }
 
 void MainWindow::on_treewidget_clicked(QTreeWidgetItem *item, int column) {

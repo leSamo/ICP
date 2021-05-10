@@ -155,26 +155,6 @@
      <string>Topic</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>990</x>
-      <y>10</y>
-      <width>151</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
-   <zorder>horizontalLayoutWidget_2</zorder>
-   <zorder>btnAdd_item</zorder>
-   <zorder>btnAdd_item</zorder>
-   <zorder>txtTitle</zorder>
-   <zorder>btnConnect</zorder>
-   <zorder>inputServer</zorder>
-   <zorder>inputTopic</zorder>
-   <zorder>dash_name</zorder>
-   <zorder>dash_topic</zorder>
-   <zorder>comboBox</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -182,7 +162,7 @@
      <x>0</x>
      <y>0</y>
      <width>1212</width>
-     <height>29</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
