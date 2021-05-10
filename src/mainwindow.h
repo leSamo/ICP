@@ -21,9 +21,6 @@ namespace Ui {
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
-    QTreeWidgetItem* AddRoot(QString name, QString desc, QString time, QString path);
-    QTreeWidgetItem* AddChild(QTreeWidgetItem *parent, QString name, QString desc, QString time, QString path);
-    void AddToDash(QString desc, QString topic);
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
@@ -39,10 +36,13 @@ private:
     HelpDialog *help;
     std::deque<msg> msgs;
 
+    QTreeWidgetItem* AttachOrRefreshNode(QTreeWidgetItem *parent, QString topicSegment, QString msgContent, QString timeOfMsgReceived, QString topic);
+    void AddToDash(QString desc, QString topic);
+
 
 public slots:
     void DisplayMsg(QString topic, QString msg);
-    void on_treewidget_clicked(QTreeWidgetItem *item, int column);
+    void showTopicHistory(QTreeWidgetItem *item, int column);
 };
 
 #endif // MAINWINDOW_H

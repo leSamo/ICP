@@ -12,7 +12,11 @@
 using namespace std;
 using namespace chrono;
 
+/*! How many received messages should be remembered */
 #define MAX_MSG_COUNT 1000
+
+/*! MQTT client id */
+#define CLIENT_ID "xoleksxfindr"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -22,9 +26,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->treeWidget->setColumnWidth(0, 200);
     ui->treeWidget->setColumnWidth(1, 200);
 
-    // setup tree widget on click event handler
+    // setup tree widget on double click event handler
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
-            this, SLOT(on_treewidget_clicked(QTreeWidgetItem*, int)));
+            this, SLOT(showTopicHistory(QTreeWidgetItem*, int)));
 }
 
 MainWindow::~MainWindow() {
@@ -32,60 +36,39 @@ MainWindow::~MainWindow() {
 }
 
 /*!
-* Adds item to treeWidget element on root level
-* \param[in] name first column content - topic name
-* \param[in] desc second column content - last message received
+* Examine whether element with same topic exists, if yes change its content,
+* if not create a new treeWidget element
+* \param[in] topicSegment first column content
+* \param[in] msgContent second column content - content of last message received
+* \param[in] timeOfMsgReceived third column content - time of last message received
+* \param[in] topic hidden column content - used to search for element
 * \return newly created root level item
 */
-QTreeWidgetItem* MainWindow::AddRoot(QString name, QString desc, QString time, QString path) {
-    // if element with the same name exists dont create a new one
-    QList<QTreeWidgetItem*> clist = ui->treeWidget->findItems(path, Qt::MatchContains|Qt::MatchRecursive, 3);
+QTreeWidgetItem* MainWindow::AttachOrRefreshNode(QTreeWidgetItem *parent, QString topicSegment, QString msgContent, QString timeOfMsgReceived, QString topic) {
+    // search if element with same topic exists
+    QList<QTreeWidgetItem*> clist = ui->treeWidget->findItems(topic, Qt::MatchContains|Qt::MatchRecursive, 3);
+
 
     QTreeWidgetItem *newItem;
 
-    if (clist.size() > 0) {
+    if (clist.size() > 0) {             // exists
         newItem = clist[0];
     }
-    else {
-        newItem = new QTreeWidgetItem(ui->treeWidget);
-        ui->treeWidget->addTopLevelItem(newItem);
+    else {                              // doesn't exist, create new one
+        if (parent) {                   // new non-root level element
+            newItem = new QTreeWidgetItem();
+            parent->addChild(newItem);
+        }
+        else {                          // new root level element
+            newItem = new QTreeWidgetItem(ui->treeWidget);
+            ui->treeWidget->addTopLevelItem(newItem);
+        }
     }
 
-    newItem->setText(0, name);
-    newItem->setText(1, desc);
-    newItem->setText(2, time);
-    newItem->setText(3, path);
-
-    return newItem;
-}
-
-
-/*!
-* Attach new item to treeWidget element as child
-* \param[in] parent treeWidget item to which the new item should be attached to
-* \param[in] name first column content - topic name
-* \param[in] desc second column content - last message received
-* \return newly created treeWidget item
-*/
-QTreeWidgetItem* MainWindow::AddChild(QTreeWidgetItem *parent, QString name, QString desc, QString time, QString path) {
-    // if element with the same name exists dont create a new one
-    QList<QTreeWidgetItem*> clist = ui->treeWidget->findItems(path, Qt::MatchContains|Qt::MatchRecursive, 3);
-
-    QTreeWidgetItem *newItem;
-
-    if (clist.size() > 0) {
-        newItem = clist[0];
-    }
-    else {
-        newItem = new QTreeWidgetItem();
-
-        parent->addChild(newItem);
-    }
-
-    newItem->setText(0, name);
-    newItem->setText(1, desc);
-    newItem->setText(2, time);
-    newItem->setText(3, path);
+    newItem->setText(0, topicSegment);
+    newItem->setText(1, msgContent);
+    newItem->setText(2, timeOfMsgReceived);
+    newItem->setText(3, topic);
 
     return newItem;
 }
@@ -108,9 +91,6 @@ void MainWindow::AddToDash(QString desc, QString topic){
         }
     }
 }
-
-
-const std::string CLIENT_ID { "xoleksxfindr" };
 
 void MainWindow::on_btnConnect_clicked() {
     QString server = ui->inputServer->toPlainText();
@@ -207,69 +187,86 @@ void MainWindow::on_actionHelp_triggered() {
 }
 
 void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
-    // split topic name on '/' character
-    std::stringstream test(Qtopic.toUtf8().constData());
-    std::string segment;
     std::vector<std::string> seglist;
     QTreeWidgetItem* parent;
-    stringstream ss;
+    QString QcurrentTime;
+    string supertopic;
 
-    time_point<system_clock> now = system_clock::now();
-    time_t now_time = system_clock::to_time_t(now);
+    {   // get current time in HH:MM:SS format
+        stringstream ss;
 
-    auto gmt_time = gmtime(&now_time);
-    ss << std::put_time(gmt_time, "%H:%M:%S");
-    QString QcurrentTime = QString::fromStdString(ss.str());
-    ss.str("");
+        time_point<system_clock> now = system_clock::now();
+        time_t now_time = system_clock::to_time_t(now);
 
+        auto gmt_time = gmtime(&now_time);
+        ss << std::put_time(gmt_time, "%H:%M:%S");
+        QcurrentTime = QString::fromStdString(ss.str());
+    }
+
+    // add received messages to history
     msg newMsg = { Qtopic, Qmsg, QcurrentTime };
     msgs.push_front(newMsg);
 
+    // if buffer is to overflow, remove oldest message
     if (msgs.size() > MAX_MSG_COUNT) {
         msgs.pop_back();
     }
 
-    while(std::getline(test, segment, '/'))
-    {
-       seglist.push_back(segment);
+    {   // split topic name on '/' character
+        std::stringstream ss(Qtopic.toUtf8().constData());
+        std::string segment;
+
+        while(std::getline(ss, segment, '/'))
+        {
+           seglist.push_back(segment);
+        }
     }
 
     if (seglist.size() == 1) {
-        parent = MainWindow::AddRoot(QString::fromStdString(seglist[0]), Qmsg, QcurrentTime, QString::fromStdString(seglist[0]));
+        parent = MainWindow::AttachOrRefreshNode(nullptr, QString::fromStdString(seglist[0]), Qmsg, QcurrentTime, QString::fromStdString(seglist[0]));
     }
     else {
-        parent = MainWindow::AddRoot(QString::fromStdString(seglist[0]), "", "", QString::fromStdString(seglist[0]));
+        parent = MainWindow::AttachOrRefreshNode(nullptr, QString::fromStdString(seglist[0]), "", "", QString::fromStdString(seglist[0]));
     }
 
     for (int i = 1; i < seglist.size(); i++) {
-        copy(seglist.begin(),seglist.begin() + i + 1, ostream_iterator<string>(ss,"/"));
-        string path = ss.str();
-        path.pop_back(); // remove trailing '/'
+        {   // concat this segment and previous segment to form supertopic
+            stringstream ss;
+            copy(seglist.begin(),seglist.begin() + i + 1, ostream_iterator<string>(ss,"/"));
+            supertopic = ss.str();
+            supertopic.pop_back(); // remove trailing '/'
+        }
 
         if (i == seglist.size() - 1) {
-            parent = MainWindow::AddChild(parent, QString::fromStdString(seglist[i]), Qmsg, QcurrentTime, QString::fromStdString(path));
+            parent = MainWindow::AttachOrRefreshNode(parent, QString::fromStdString(seglist[i]), Qmsg, QcurrentTime, QString::fromStdString(supertopic));
         }
         else {
-            parent = MainWindow::AddChild(parent, QString::fromStdString(seglist[i]), "", "", QString::fromStdString(path));
+            parent = MainWindow::AttachOrRefreshNode(parent, QString::fromStdString(seglist[i]), "", "", QString::fromStdString(supertopic));
         }        
     }
 
     MainWindow::AddToDash(Qmsg, Qtopic);
 }
 
-void MainWindow::on_treewidget_clicked(QTreeWidgetItem *item, int column) {
+/*!
+* Event handler for user double clicking a topic.
+* Upon user clicking any topic in the treewidget show history for that topic.
+* \param[in] item - which row was selected
+* \param[in] column - which column was double clicked on - unused
+*/
+void MainWindow::showTopicHistory(QTreeWidgetItem *item, int column) {
     cout << "Show history for " << item->text(3).toUtf8().constData() << endl;
 
-    QString topic = item->text(3);
+    QString topic = item->text(3); // row selected by user, topic is extracted by reading column with index 3
 
     TopicDialog *topicDialog = new TopicDialog(this);
 
     topicDialog->show();
     topicDialog->setTitle(topic);
 
-    cout << topic.toUtf8().constData() << " vs " << msgs[0].topic.toUtf8().constData() << endl;
-
+    // filter only msgs, which are of desired topic
     std::deque<msg> filteredMsgs;
     std::copy_if(msgs.begin(), msgs.end(), std::back_inserter(filteredMsgs), [topic](msg message){return message.topic == topic;});
+
     topicDialog->setMsgs(filteredMsgs);
 }

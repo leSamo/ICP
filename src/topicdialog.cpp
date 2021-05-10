@@ -6,6 +6,9 @@ TopicDialog::TopicDialog(QWidget *parent) :
     ui(new Ui::TopicDialog)
 {
     ui->setupUi(this);
+
+    // hide row numbers in tablewidget
+    ui->tableWidget->verticalHeader()->setVisible(false);
 }
 
 TopicDialog::~TopicDialog()
