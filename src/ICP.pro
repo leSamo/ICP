@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     helpdialog.cpp \
     callback.cpp \
     actionlistener.cpp \
-    topicdialog.cpp
+    topicdialog.cpp \
+    publisher.cpp
 
 HEADERS  += mainwindow.h \
     async_consume.h \
@@ -27,7 +28,8 @@ HEADERS  += mainwindow.h \
     callback.h \
     actionlistener.h \
     topicdialog.h \
-    message.h
+    message.h \
+    publisher.h
 
 FORMS    += mainwindow.ui \
     helpdialog.ui \

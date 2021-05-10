@@ -9,6 +9,7 @@
 #include "mqtt/async_client.h"
 #include <chrono>
 #include <iomanip>
+
 using namespace std;
 using namespace chrono;
 
@@ -29,6 +30,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // setup tree widget on double click event handler
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
             this, SLOT(showTopicHistory(QTreeWidgetItem*, int)));
+
+    Publisher *publisher = new Publisher();
+    publisher->Publish("xoleksxfindr/ahoj", "ahoj");
 }
 
 MainWindow::~MainWindow() {
@@ -283,10 +287,8 @@ void MainWindow::showTopicHistory(QTreeWidgetItem *item, int column) {
 
     QString topic = item->text(3); // row selected by user, topic is extracted by reading column with index 3
 
-    TopicDialog *topicDialog = new TopicDialog(this);
-
+    TopicDialog *topicDialog = new TopicDialog(this, topic);
     topicDialog->show();
-    topicDialog->setTitle(topic);
 
     // filter only msgs, which are of desired topic
     std::deque<msg> filteredMsgs;

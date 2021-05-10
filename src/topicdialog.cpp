@@ -1,18 +1,18 @@
 #include "topicdialog.h"
 #include "ui_topicdialog.h"
 
-TopicDialog::TopicDialog(QWidget *parent) :
+TopicDialog::TopicDialog(QWidget *parent, QString topic) :
     QDialog(parent),
-    ui(new Ui::TopicDialog)
-{
+    ui(new Ui::TopicDialog) {
     ui->setupUi(this);
+    this->topic = topic;
+    setTitle(topic);
 
     // hide row numbers in tablewidget
     ui->tableWidget->verticalHeader()->setVisible(false);
 }
 
-TopicDialog::~TopicDialog()
-{
+TopicDialog::~TopicDialog() {
     delete ui;
 }
 
@@ -33,4 +33,15 @@ void TopicDialog::setMsgs(std::deque<msg> msgs) {
         ui->tableWidget->setItem(rowIndex, 0, timeCell);
         ui->tableWidget->setItem(rowIndex, 1, messageCell);
     }
+}
+
+void TopicDialog::on_btnSend_clicked() {
+    std::string msg = ui->inputMsg->toPlainText().toUtf8().constData();
+
+    Publisher *publisher = new Publisher();
+    publisher->Publish(topic.toUtf8().constData(), msg);
+}
+
+void TopicDialog::on_btnOK_clicked() {
+    this->destroy(true);
 }

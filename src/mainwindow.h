@@ -13,6 +13,7 @@
 #include "helpdialog.h"
 #include <deque>
 #include "message.h"
+#include "publisher.h"
 
 namespace Ui {
     class MainWindow;
