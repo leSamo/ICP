@@ -36,6 +36,16 @@
          <string>Last message</string>
         </property>
        </column>
+       <column>
+        <property name="text">
+         <string>Last message time</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Hidden</string>
+        </property>
+       </column>
       </widget>
      </item>
      <item>

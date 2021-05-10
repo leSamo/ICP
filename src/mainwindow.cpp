@@ -6,9 +6,18 @@
 #include "helpdialog.h"
 #include <QDebug>
 #include "mqtt/async_client.h"
+#include <chrono>
+#include <iomanip>
+using namespace std;
+using namespace chrono;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+
+    // setup tree widget appearance
+    ui->treeWidget->setColumnHidden(3, true);
+    ui->treeWidget->setColumnWidth(0, 200);
+    ui->treeWidget->setColumnWidth(1, 200);
 }
 
 MainWindow::~MainWindow() {
@@ -21,21 +30,26 @@ MainWindow::~MainWindow() {
 * \param[in] desc second column content - last message received
 * \return newly created root level item
 */
-QTreeWidgetItem* MainWindow::AddRoot(QString name, QString desc) {
+QTreeWidgetItem* MainWindow::AddRoot(QString name, QString desc, QString time, QString path) {
     // if element with the same name exists dont create a new one
-    QList<QTreeWidgetItem*> clist = ui->treeWidget->findItems(name, Qt::MatchContains|Qt::MatchRecursive, 0);
+    QList<QTreeWidgetItem*> clist = ui->treeWidget->findItems(path, Qt::MatchContains|Qt::MatchRecursive, 3);
+
+    QTreeWidgetItem *newItem;
 
     if (clist.size() > 0) {
-        return clist[0];
+        newItem = clist[0];
+    }
+    else {
+        newItem = new QTreeWidgetItem(ui->treeWidget);
+        ui->treeWidget->addTopLevelItem(newItem);
     }
 
-    QTreeWidgetItem *itm = new QTreeWidgetItem(ui->treeWidget);
-    itm->setText(0, name);
-    itm->setText(1, desc);
+    newItem->setText(0, name);
+    newItem->setText(1, desc);
+    newItem->setText(2, time);
+    newItem->setText(3, path);
 
-    ui->treeWidget->addTopLevelItem(itm);
-
-    return itm;
+    return newItem;
 }
 
 /*!
@@ -45,17 +59,30 @@ QTreeWidgetItem* MainWindow::AddRoot(QString name, QString desc) {
 * \param[in] desc second column content - last message received
 * \return newly created treeWidget item
 */
-QTreeWidgetItem* MainWindow::AddChild(QTreeWidgetItem *parent, QString name, QString desc) {
-    QTreeWidgetItem *itm = new QTreeWidgetItem();
-    itm->setText(0, name);
-    itm->setText(1, desc);
+QTreeWidgetItem* MainWindow::AddChild(QTreeWidgetItem *parent, QString name, QString desc, QString time, QString path) {
+    // if element with the same name exists dont create a new one
+    QList<QTreeWidgetItem*> clist = ui->treeWidget->findItems(path, Qt::MatchContains|Qt::MatchRecursive, 3);
 
-    parent->addChild(itm);
+    QTreeWidgetItem *newItem;
 
-    return itm;
+    if (clist.size() > 0) {
+        newItem = clist[0];
+    }
+    else {
+        newItem = new QTreeWidgetItem();
+
+        parent->addChild(newItem);
+    }
+
+    newItem->setText(0, name);
+    newItem->setText(1, desc);
+    newItem->setText(2, time);
+    newItem->setText(3, path);
+
+    return newItem;
 }
 
-const std::string CLIENT_ID		{ "xoleksxfindr" };
+const std::string CLIENT_ID { "xoleksxfindr" };
 
 void MainWindow::on_btnConnect_clicked() {
     QString server = ui->inputServer->toPlainText();
@@ -158,15 +185,38 @@ void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
     std::stringstream test(Qtopic.toUtf8().constData());
     std::string segment;
     std::vector<std::string> seglist;
+    QTreeWidgetItem* parent;
+    stringstream ss;
+
+    time_point<system_clock> now = system_clock::now();
+    time_t now_time = system_clock::to_time_t(now);
+
+    auto gmt_time = gmtime(&now_time);
+    ss << std::put_time(gmt_time, "%H:%M:%S");
+    QString QcurrentTime = QString::fromStdString(ss.str());
+    ss.str("");
 
     while(std::getline(test, segment, '/'))
     {
        seglist.push_back(segment);
     }
 
-    QTreeWidgetItem* parent = MainWindow::AddRoot(QString::fromStdString(seglist[0]), Qmsg);
+    if (seglist.size() == 1) {
+        parent = MainWindow::AddRoot(QString::fromStdString(seglist[0]), Qmsg, QcurrentTime, QString::fromStdString(seglist[0]));
+    }
+    else {
+        parent = MainWindow::AddRoot(QString::fromStdString(seglist[0]), "", "", QString::fromStdString(seglist[0]));
+    }
 
     for (int i = 1; i < seglist.size(); i++) {
-        parent = MainWindow::AddChild(parent, QString::fromStdString(seglist[i]), Qmsg);
+        copy(seglist.begin(),seglist.begin() + i + 1, ostream_iterator<string>(ss,"/"));
+        string path = ss.str();
+
+        if (i == seglist.size() - 1) {
+            parent = MainWindow::AddChild(parent, QString::fromStdString(seglist[i]), Qmsg, QcurrentTime, QString::fromStdString(path));
+        }
+        else {
+            parent = MainWindow::AddChild(parent, QString::fromStdString(seglist[i]), "", "", QString::fromStdString(path));
+        }
     }
 }
