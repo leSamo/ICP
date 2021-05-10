@@ -135,34 +135,58 @@ void MainWindow::on_btnAdd_item_clicked() {
     QWidget* wdg = new QWidget();
     wdg->setStyleSheet( "QWidget{ background-color : rgba( 160, 160, 160, 255); border-radius : 3px;  }");
     wdg->setFixedSize(QSize(300, 80));
-    QLabel *label_name = new QLabel(wdg);
-    QLabel *label_topic = new QLabel(wdg);
-    QLabel *label_type = new QLabel(wdg);
-
-    QString str_name = "Name: " + ui->dash_name->toPlainText();
-    QString str_topic = "Topic: " + ui->dash_topic->toPlainText();
-    QString str_type = "Type: ";
-
-
-    label_name->setText(str_name);
-    label_topic->setText(str_topic);
-    label_type->setText(str_type);
 
     QVBoxLayout *layout2 = new QVBoxLayout();
     QHBoxLayout *layout3 = new QHBoxLayout();
 
-    wdg->setLayout(layout3);
-    layout2->addWidget(label_name);
-    layout2->addWidget(label_topic);
-    layout2->addWidget(label_type);
+
+    QLabel *label_name = new QLabel(wdg);
+    QLabel *label_topic = new QLabel(wdg);
+    QString str_name = "Name: " + ui->dash_name->toPlainText();
+    QString str_topic = "Topic: " + ui->dash_topic->toPlainText();
+
+    label_name->setText(str_name);
+    label_topic->setText(str_topic);
 
     QPushButton* button = new QPushButton("X");
     button->setFixedSize(QSize(50, 50));
     button->setStyleSheet("background-color : rgba( 100, 100, 100, 255); ");
 
-    layout3->addItem(layout2);
-    layout3->addWidget(button);
+    if (QString::compare(ui->dash_CB->currentText(), "Recieve") == 0){
 
+        QLabel *label_type = new QLabel(wdg);
+        QString str_type = "Value: ";
+        label_type->setText(str_type);
+
+
+        layout2->addWidget(label_name);
+        layout2->addWidget(label_topic);
+        layout2->addWidget(label_type);
+
+
+        layout3->addItem(layout2);
+        layout3->addWidget(button);
+    } else if (QString::compare(ui->dash_CB->currentText(), "Send") == 0){
+
+        layout2->addWidget(label_name);
+        layout2->addWidget(label_topic);
+        QPlainTextEdit *textblock = new QPlainTextEdit(wdg);
+        textblock->setStyleSheet("background-color : rgba( 80, 80, 80, 255); ");
+        layout2->addWidget(textblock);
+
+        QVBoxLayout *layout4 = new QVBoxLayout();
+
+        QPushButton* buttonSend = new QPushButton("Send");
+        buttonSend->setFixedSize(QSize(50, 20));
+        buttonSend->setStyleSheet("background-color : rgba( 100, 100, 100, 255); ");
+        button->setFixedSize(QSize(50, 20));
+
+        layout3->addItem(layout2);
+        layout4->addWidget(button);
+        layout4->addWidget(buttonSend);
+        layout3->addItem(layout4);
+    }
+    wdg->setLayout(layout3);
     for (int y = 0; y < 2; y++){
         for (int x = 0; x < 5;x++){
             if (layout->itemAtPosition(x,y) == 0){

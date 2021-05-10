@@ -155,6 +155,26 @@
      <string>Topic</string>
     </property>
    </widget>
+   <widget class="QComboBox" name="dash_CB">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>10</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Recieve</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Send</string>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
