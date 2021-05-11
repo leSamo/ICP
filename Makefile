@@ -9,7 +9,7 @@ doxygen:
 	doxygen Doxyfile	
 
 clean:
-	rm -rf doc/ build/
+	rm -rf doc/ src/*.o
 
 pack: clean
-	zip 1-xoleks00-xfindr00.zip *
+	zip -r 1-xoleks00-xfindr00.zip *
