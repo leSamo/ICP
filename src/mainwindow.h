@@ -31,6 +31,7 @@ private slots:
     void on_btnAdd_item_clicked();
     void on_actionHelp_triggered();
     void onRemove();
+    void onSend();
 
 private:
     Ui::MainWindow *ui;

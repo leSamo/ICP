@@ -24,11 +24,11 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>25</pointsize>
+     <pointsize>20</pointsize>
     </font>
    </property>
    <property name="text">
-    <string>HELP</string>
+    <string>ABOUT</string>
    </property>
    <property name="textFormat">
     <enum>Qt::RichText</enum>
@@ -47,7 +47,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>This is help message for this projct. </string>
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ICP Project - MQTT Broker &lt;/p&gt;&lt;p&gt;about:&lt;/p&gt;&lt;p&gt;authors: Samuel Olekšák - xoleks00&lt;br/&gt;Michal Findra - xfindr00&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </widget>
  </widget>

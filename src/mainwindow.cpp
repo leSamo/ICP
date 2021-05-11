@@ -88,7 +88,7 @@ void MainWindow::AddToDash(QString desc, QString topic){
         for (int x = 0; x < 5;x++){
             if (layout->itemAtPosition(x,y) != 0){
                 QList<QLabel *> labels = layout->itemAtPosition(x,y)->widget()->findChildren<QLabel *>();
-                if (QString::compare( labels[1]->text() ,("Topic: " + topic)) == 0){
+                if (QString::compare( labels[1]->text() ,("Topic: " + topic)) == 0 && labels.count() == 3){
                    labels[2]->setText("Value: "+ desc);
                 }
             }
@@ -133,45 +133,53 @@ void MainWindow::on_btnConnect_clicked() {
 
 }
 
+/*!
+* Create new widget in Dash board, from given values and type
+*/
 void MainWindow::on_btnAdd_item_clicked() {
+    // get dashboard layout
     QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
 
+    // create new dashboard widget
     QWidget* wdg = new QWidget();
     wdg->setStyleSheet( "QWidget{ background-color : rgba( 160, 160, 160, 255); border-radius : 3px;  }");
     wdg->setFixedSize(QSize(300, 80));
 
+    // dashboard widget layouts
     QVBoxLayout *layout2 = new QVBoxLayout();
     QHBoxLayout *layout3 = new QHBoxLayout();
 
-
+    // create and set name and topic label
     QLabel *label_name = new QLabel(wdg);
     QLabel *label_topic = new QLabel(wdg);
     QString str_name = "Name: " + ui->dash_name->toPlainText();
     QString str_topic = "Topic: " + ui->dash_topic->toPlainText();
-
     label_name->setText(str_name);
     label_topic->setText(str_topic);
 
+    //create buuton to close widget
     QPushButton* button = new QPushButton("X");
     button->setFixedSize(QSize(50, 50));
     button->setStyleSheet("background-color : rgba( 100, 100, 100, 255); ");
 
+    // create Recieve or Send widget
     if (QString::compare(ui->dash_CB->currentText(), "Recieve") == 0){
 
+        // create value label
         QLabel *label_type = new QLabel(wdg);
         QString str_type = "Value: ";
         label_type->setText(str_type);
 
-
+        // insert items into layouts in created widget
         layout2->addWidget(label_name);
         layout2->addWidget(label_topic);
         layout2->addWidget(label_type);
-
-
         layout3->addItem(layout2);
         layout3->addWidget(button);
+
     } else if (QString::compare(ui->dash_CB->currentText(), "Send") == 0){
 
+        // insert items into layouts in created widget
         layout2->addWidget(label_name);
         layout2->addWidget(label_topic);
         QPlainTextEdit *textblock = new QPlainTextEdit(wdg);
@@ -180,16 +188,27 @@ void MainWindow::on_btnAdd_item_clicked() {
 
         QVBoxLayout *layout4 = new QVBoxLayout();
 
+        // create Send button
         QPushButton* buttonSend = new QPushButton("Send");
         buttonSend->setFixedSize(QSize(50, 20));
         buttonSend->setStyleSheet("background-color : rgba( 100, 100, 100, 255); ");
+
+        // resize close button
         button->setFixedSize(QSize(50, 20));
 
+        // insert items into layouts in created widget
         layout3->addItem(layout2);
         layout4->addWidget(button);
         layout4->addWidget(buttonSend);
         layout3->addItem(layout4);
+
+        // connect Send button behaviour
+        QObject::connect(
+                    buttonSend, &QPushButton::clicked,
+                    this, &MainWindow::onSend);
     }
+
+    // check position in dash grid layout and insert created widget
     wdg->setLayout(layout3);
     for (int y = 0; y < 2; y++){
         for (int x = 0; x < 5;x++){
@@ -199,16 +218,46 @@ void MainWindow::on_btnAdd_item_clicked() {
         }
     }
 
+    // connect Close button behaviour
     QObject::connect(
                 button, &QPushButton::clicked,
                 this, &MainWindow::onRemove);
+
+
 }
 
+/*!
+* Close and remove widget from dashboard
+*/
 void MainWindow::onRemove() {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
     delete button->parent();
 }
 
+
+/*!
+* Send message to subsribed topic from Send widget in dashboard
+*/
+void MainWindow::onSend() {
+    QPushButton* buttonS = qobject_cast<QPushButton*>(sender());
+
+    // get message from calling object
+    QList<QPlainTextEdit *> textEdit = buttonS->parent()->findChildren<QPlainTextEdit *>();
+    std::string msg = textEdit[0]->toPlainText().toUtf8().constData();
+
+    // get topic from calling object
+    QList<QLabel *> labels = buttonS->parent()->findChildren<QLabel *>();
+    QStringList pieces = labels[1]->text().split( "Topic: " );
+    QString msgTopic = pieces.value( pieces.length() - 1 );
+
+    // publish message to topic
+    Publisher *publisher = new Publisher();
+    publisher->Publish(msgTopic.toUtf8().constData(), msg);
+}
+
+/*!
+* Open dialog window with About
+*/
 void MainWindow::on_actionHelp_triggered() {
     help = new HelpDialog(this);
     help->show();
@@ -257,7 +306,7 @@ void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
         parent = MainWindow::AttachOrRefreshNode(nullptr, QString::fromStdString(seglist[0]), "", "", QString::fromStdString(seglist[0]));
     }
 
-    for (int i = 1; i < seglist.size(); i++) {
+    for (long unsigned int i = 1; i < seglist.size(); i++) {
         {   // concat this segment and previous segment to form supertopic
             stringstream ss;
             copy(seglist.begin(),seglist.begin() + i + 1, ostream_iterator<string>(ss,"/"));

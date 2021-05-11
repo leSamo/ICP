@@ -191,7 +191,6 @@
     </property>
     <addaction name="separator"/>
     <addaction name="actionHelp"/>
-    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuMenu"/>
   </widget>
@@ -200,11 +199,6 @@
    <property name="checkable">
     <bool>false</bool>
    </property>
-   <property name="text">
-    <string>Help</string>
-   </property>
-  </action>
-  <action name="actionAbout">
    <property name="text">
     <string>About</string>
    </property>
