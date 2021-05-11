@@ -54,7 +54,7 @@ void messageLoop(struct mosquitto *mosq, std::vector<std::string> configList, in
 
 		// if current time modulo interval is non zero, don't send this message at this second
 		if (second % std::stoi(interval) != 0) {
-			break;
+			continue;
 		}
 
 		std::string message = words[2];
