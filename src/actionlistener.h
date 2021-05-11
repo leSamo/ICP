@@ -1,6 +1,7 @@
 /*! \file actionlistener.h
  * ICP project 2020/21
  * Author: Samuel Olekšák
+ * Parts of this file might have been transferred from eclipse/paho.mqtt.cpp github repository, licence: https://www.eclipse.org/legal/epl-v10.html
  */
 
 #ifndef ACTIONLISTENER_H

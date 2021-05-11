@@ -1,3 +1,8 @@
+// send.cpp
+// ICP project 2020/21
+// Author: Samuel Olekšák
+// Parts of this file might have been transferred from eclipse/mosquitto github repository, licence: https://www.eclipse.org/legal/epl-v10.html
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
