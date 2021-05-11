@@ -6,19 +6,28 @@
 
 #define SERVER_ADDRESS "broker.emqx.io"
 #define SERVER_PORT 1883
-#define MAX_MSG_COUNT 1 // how many messages should be received before printing and existing
 #define TOPIC "xoleksxfindr/#"
 
 int main(int argc, char *argv[]) {
+	if (argc != 3) {
+		printf("Invalid number of arguments\n");
+		return EXIT_FAILURE;
+	}
+
+	if (std::string(argv[1]) == "--help") {
+		printf("Usage: ./receive [topic] [number of messages to receive]\n");
+		return EXIT_SUCCESS;
+	}
+
 	struct mosquitto_message *message;
 
 	mosquitto_lib_init();
 
 	int retval = mosquitto_subscribe_simple(
 		&message,
-		MAX_MSG_COUNT,
+		std::stoi(argv[2]),
 		false, 				// want retained
-		TOPIC,
+		argv[1],			// topic
 		2, 					// QoS
 		SERVER_ADDRESS,
 		SERVER_PORT,
@@ -39,7 +48,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// listen for MAX_MSG_COUNT messages and print them
-	for (uint i = 0; i < MAX_MSG_COUNT; i++) {
+	for (uint i = 0; i < std::stoi(argv[2]); i++) {
 		std::cout << message[i].topic << ": " << (char*) message[i].payload << std::endl;
 		mosquitto_message_free_contents(&message[i]);
 	}
