@@ -183,7 +183,7 @@ void MainWindow::on_btnAdd_item_clicked() {
     // create new dashboard widget
     QWidget* wdg = new QWidget();
     wdg->setStyleSheet( "QWidget{ background-color : rgba( 160, 160, 160, 255); border-radius : 3px;  }");
-    wdg->setFixedSize(QSize(300, 80));
+    wdg->setFixedSize(QSize(350, 80));
 
     // dashboard widget layouts
     QVBoxLayout *layout2 = new QVBoxLayout();
