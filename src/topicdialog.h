@@ -21,7 +21,7 @@ class TopicDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit TopicDialog(QWidget *parent, QString topic, std::deque<msg> msgs);
+    explicit TopicDialog(QWidget *parent, std::string serverAddress, QString topic, std::deque<msg> msgs);
     ~TopicDialog();
 
 private slots:
@@ -31,6 +31,7 @@ private slots:
 private:
     Ui::TopicDialog *ui;
     QString topic;
+    std::string serverAddress;
 
     void setMsgs(std::deque<msg> msgs);
 };

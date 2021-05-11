@@ -26,52 +26,55 @@ void callback::reconnect() {
     }
 }
 
-// Re-connection failure
-void callback::on_failure(const mqtt::token& tok) {
-    std::cout << "Connection attempt failed" << std::endl;
+/*!
+ * \brief Callback invoked when connection is unsuccessfull
+ * \param[in] token
+ */
+void callback::on_failure(const mqtt::token& token) {
+    std::cout << "Failed to connect" << std::endl;
+
+    // try to connect again for a few times
     if (++nretry_ > N_RETRY_ATTEMPTS)
         exit(1);
     reconnect();
 }
 
-// (Re)connection success
-// Either this or connected() can be used for callbacks.
-void callback::on_success(const mqtt::token& tok) {}
+/*!
+ * \brief Callback invoked when connection is successfull, same as connected
+ * \param[in] token
+ */
+void callback::on_success(const mqtt::token& token) {}
 
-// (Re)connection success
-void callback::connected(const std::string& cause) {
-    std::cout << "\nConnection success" << std::endl;
-    std::cout << "\nSubscribing \n"
-        << "\tfor client " << "CLIENT_ID"
-        << " using QoS" << QOS << "\n"
-        << "\nPress Q<Enter> to quit\n" << std::endl;
+/*!
+ * \brief Callback invoked when connection is successfull
+ * \param[in] info - info about event
+ */
+void callback::connected(const std::string& info) {
+    std::cout << "Connected" << std::endl;
 
     cli_.subscribe("xoleksxfindr/#", 2, nullptr, subListener_);
 }
 
-// Callback for when the connection is lost.
-// This will initiate the attempt to manually reconnect.
-void callback::connection_lost(const std::string& cause) {
-    std::cout << "\nConnection lost" << std::endl;
-    if (!cause.empty())
-        std::cout << "\tcause: " << cause << std::endl;
-    /*
-    std::cout << "Reconnecting..." << std::endl;
-    nretry_ = 0;
-    reconnect();
-    */
+/*!
+ * \brief Callback invoked when connection to MQTT server is lost
+ * \param[in] cause - info about event
+ */
+void callback::connection_lost(const std::string& reason) {
+    std::cout << "Connection lost: " << reason << std::endl;
 }
 
-// Callback for when a message arrives.
+/*!
+ * \brief Callback invoked when a message arrives
+ * \param[in] msg - structure containing info about received message
+ */
 void callback::message_arrived(mqtt::const_message_ptr msg) {
-    std::string content = msg->get_topic();
+    std::string topic = msg->get_topic();
 
-    if (content.back() == '/') {
-        content.pop_back();
+    if (topic.back() == '/') {
+        topic.pop_back();
     }
 
-    emit DisplayMsg(QString::fromStdString(content), QString::fromStdString(msg->to_string()));
-    std::cout << "Message arrived" << std::endl;
-    std::cout << "\ttopic: '" << content << "'" << std::endl;
-    std::cout << "\tpayload: '" << msg->to_string() << "'\n" << std::endl;
+    emit DisplayMsg(QString::fromStdString(topic), QString::fromStdString(msg->to_string()));
+
+    std::cout << topic << ": " << msg->to_string() << std::endl;
 }

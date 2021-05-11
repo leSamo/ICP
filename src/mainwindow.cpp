@@ -35,9 +35,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // setup tree widget on double click event handler
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
             this, SLOT(showTopicHistory(QTreeWidgetItem*, int)));
-
-    Publisher *publisher = new Publisher();
-    publisher->Publish("xoleksxfindr/ahoj", "ahoj");
 }
 
 MainWindow::~MainWindow() {
@@ -105,6 +102,7 @@ void MainWindow::on_btnConnect_clicked() {
     QString server = ui->inputServer->toPlainText();
     QString topic = ui->inputTopic->toPlainText();
     ui->txtTitle->setText(topic);
+    serverAddress = server.toUtf8().constData();
 /*
     if (isConnected()) {
         disconnect();
@@ -256,8 +254,7 @@ void MainWindow::onSend() {
     QString msgTopic = pieces.value( pieces.length() - 1 );
 
     // publish message to topic
-    Publisher *publisher = new Publisher();
-    publisher->Publish(msgTopic.toUtf8().constData(), msg);
+    Publisher::Publish(serverAddress, msgTopic.toUtf8().constData(), msg);
 }
 
 /*!
@@ -345,6 +342,6 @@ void MainWindow::showTopicHistory(QTreeWidgetItem *item, int column) {
     std::deque<msg> filteredMsgs;
     std::copy_if(msgs.begin(), msgs.end(), std::back_inserter(filteredMsgs), [topic](msg message){std::string content = message.topic.toUtf8().constData(); return content.find(topic.toUtf8().constData()) == 0;});
 
-    TopicDialog *topicDialog = new TopicDialog(this, topic, filteredMsgs);
+    TopicDialog *topicDialog = new TopicDialog(this, serverAddress, topic, filteredMsgs);
     topicDialog->show();
 }

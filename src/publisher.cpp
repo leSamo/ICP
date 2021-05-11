@@ -12,30 +12,24 @@
 #include "mqtt/client.h"
 #include "publisher.h"
 
-const std::string SERVER_ADDRESS { "broker.emqx.io:1883" };
-const std::string CLIENT_ID { "xoleks" };
+#define CLIENT_ID "xoleks"
 
-const int QOS = 1;
-
-Publisher::Publisher() {
-
-}
-
-void Publisher::Publish(std::string topic, std::string content) {
-    mqtt::client client(SERVER_ADDRESS, CLIENT_ID);
-
+/*!
+* Publish a message
+* \param[in] serverAddress
+* \param[in] topic
+* \param[in] content - message to publish
+*/
+void Publisher::Publish(std::string serverAddress, std::string topic, std::string content) {
+    mqtt::client client(serverAddress, CLIENT_ID);
     mqtt::connect_options connOpts;
-    connOpts.set_keep_alive_interval(20);
-    //connOpts.set_clean_session(true);
 
     try {
         client.connect(connOpts);
-
-        client.publish(mqtt::message(topic, content, QOS, false));
-
+        client.publish(mqtt::message(topic, content, 2, false));
         client.disconnect();
     }
     catch (const mqtt::exception& exc) {
-        std::cerr << exc.what() << std::endl;
+        std::cout << exc.what() << std::endl;
     }
 }

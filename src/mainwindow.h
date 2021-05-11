@@ -43,6 +43,7 @@ private:
     Ui::MainWindow *ui;
     HelpDialog *help;
     std::deque<msg> msgs;
+    std::string serverAddress;
 
     QTreeWidgetItem* AttachOrRefreshNode(QTreeWidgetItem *parent, QString topicSegment, QString msgContent, QString timeOfMsgReceived, QString topic);
     void AddToDash(QString desc, QString topic);

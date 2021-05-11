@@ -12,10 +12,11 @@
 * \param[in] topic
 * \param[in] msgs - deque of all message history of this this topic
 */
-TopicDialog::TopicDialog(QWidget *parent, QString topic, std::deque<msg> msgs) : QDialog(parent), ui(new Ui::TopicDialog) {
+TopicDialog::TopicDialog(QWidget *parent, std::string serverAddress, QString topic, std::deque<msg> msgs) : QDialog(parent), ui(new Ui::TopicDialog) {
     ui->setupUi(this);
 
     this->topic = topic;
+    this->serverAddress = serverAddress;
     this->setWindowTitle(topic);
     this->setMsgs(msgs);
 
@@ -56,8 +57,7 @@ void TopicDialog::setMsgs(std::deque<msg> msgs) {
 void TopicDialog::on_btnSend_clicked() {
     std::string msg = ui->inputMsg->toPlainText().toUtf8().constData();
 
-    Publisher *publisher = new Publisher();
-    publisher->Publish(topic.toUtf8().constData(), msg);
+    Publisher::Publish(serverAddress, topic.toUtf8().constData(), msg);
 }
 
 /*!
