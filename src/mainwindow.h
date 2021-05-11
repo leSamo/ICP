@@ -47,7 +47,7 @@ private:
     std::string serverAddress;
 
     QTreeWidgetItem* AttachOrRefreshNode(QTreeWidgetItem *parent, QString topicSegment, QString msgContent, QString timeOfMsgReceived, QString topic);
-    void AddToDash(QString desc, QString topic);
+    void AddToDash(QString value, QString topic);
     void readJson();
     void closeEvent (QCloseEvent *event);
 

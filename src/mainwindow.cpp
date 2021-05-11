@@ -38,12 +38,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // check config file for dashboard widgets
     QString fileName("widgets.json");
     QFile file(fileName);
+
+    // Read JSON config file or create empty
     if(QFileInfo::exists(fileName))
     {
         readJson();
     } else {
-        file.open(QIODevice::ReadWrite | QIODevice::Text);
-        qDebug()<<"file created"<<endl;
+        file.open(QIODevice::ReadWrite | QIODevice::Text);        
         file.close();
     }
 
@@ -68,7 +69,6 @@ MainWindow::~MainWindow() {
 QTreeWidgetItem* MainWindow::AttachOrRefreshNode(QTreeWidgetItem *parent, QString topicSegment, QString msgContent, QString timeOfMsgReceived, QString topic) {
     // search if element with same topic exists
     QList<QTreeWidgetItem*> clist = ui->treeWidget->findItems(topic, Qt::MatchContains|Qt::MatchRecursive, 3);
-
 
     QTreeWidgetItem *newItem;
 
@@ -96,17 +96,19 @@ QTreeWidgetItem* MainWindow::AttachOrRefreshNode(QTreeWidgetItem *parent, QStrin
 
 /*!
 * Update value in dash panel if panel for subscribed topic exists
-* \param[in] desc
-* \param[in] topic
+* \param[in] value - displayed value
+* \param[in] topic - subscribed topic
 */
-void MainWindow::AddToDash(QString desc, QString topic){
+void MainWindow::AddToDash(QString value, QString topic){
     QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
+
+    // find widget with topic
     for (int y = 0; y < 2; y++){
         for (int x = 0; x < 5;x++){
             if (layout->itemAtPosition(x,y) != 0){
                 QList<QLabel *> labels = layout->itemAtPosition(x,y)->widget()->findChildren<QLabel *>();
                 if (QString::compare( labels[1]->text() ,("Topic: " + topic)) == 0 && labels.count() == 3){
-                   labels[2]->setText("Value: "+ desc);
+                   labels[2]->setText("Value: "+ value);
                 }
             }
         }
@@ -152,7 +154,7 @@ void MainWindow::on_btnConnect_clicked() {
 }
 
 /*!
-* Create new widget in Dash board, from given values and type
+* Create new widget in Dashboard, from given values and type
 */
 void MainWindow::on_btnAdd_item_clicked() {
     // get dashboard layout
@@ -180,7 +182,7 @@ void MainWindow::on_btnAdd_item_clicked() {
     button->setFixedSize(QSize(50, 50));
     button->setStyleSheet("background-color : rgba( 100, 100, 100, 255); ");
 
-    // create Recieve or Send widget
+    // create Recieve type or Send type widget
     if (QString::compare(ui->dash_CB->currentText(), "Recieve") == 0){
 
         // create value label
@@ -363,7 +365,7 @@ void MainWindow::showTopicHistory(QTreeWidgetItem *item, int column) {
 }
 
 /*!
-* Read widgets from json config file
+* Read Dashboard widgets data from JSON config file widgets.json
 */
 void MainWindow::readJson()
 {
@@ -377,19 +379,19 @@ void MainWindow::readJson()
       }
 
       // parse json document
-      QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
-      QJsonObject jsObject = d.object();
-      QJsonArray jsArray = jsObject["widgets"].toArray();
-        qDebug() << jsObject;
+      QJsonDocument jsDoc = QJsonDocument::fromJson(val.toUtf8());
+      QJsonObject jsObject = jsDoc.object();
+      QJsonArray jsArray = jsObject["widgets"].toArray();       
+
       // insert all widgets from json file
       foreach (const QJsonValue & value, jsArray) {
           QJsonObject obj = value.toObject();
           ui->dash_name->setPlainText((obj["name"].toString()));
           ui->dash_topic->setPlainText((obj["topic"].toString()));
-          if (QString::compare((obj["type"].toString()), "Recieve",Qt::CaseInsensitive)){
-              ui->dash_CB->setCurrentText("Recieve");
+          if (QString::compare(obj["type"].toString(), "Recieve", Qt::CaseInsensitive) == 0){
+              ui->dash_CB->setCurrentText("Recieve");               
           } else {
-              ui->dash_CB->setCurrentText("Send");
+              ui->dash_CB->setCurrentText("Send");              
           }
 
           ui->btnAdd_item->click();
@@ -403,12 +405,12 @@ void MainWindow::readJson()
 
 
 /*!
-* Save created widgets into json file on exit
+* Save created widgets into JSON file on exit
 * \param[in] event - MainWindow close event
 */
 void MainWindow::closeEvent (QCloseEvent *event){
     QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
-    QJsonArray json_array;
+    QJsonArray jsArray;
 
     // save all created dashboard widgets into json object
     for (int y = 0; y < 2; y++){
@@ -425,17 +427,16 @@ void MainWindow::closeEvent (QCloseEvent *event){
                 if (labels.count() == 2){
                     item_data.insert("type", "Send");
                 } else {
-                    item_data.insert("type", "Recieve");
+                    item_data.insert("type", "Recieve");                   
                 }
-                 json_array.push_back(QJsonValue(item_data));
+                 jsArray.push_back(QJsonValue(item_data));
             }
         }
     }
 
     // put created objects into json list into json document
     QJsonObject final_object;
-    final_object.insert(QString("widgets"), QJsonValue(json_array));
-    qDebug() << final_object;
+    final_object.insert(QString("widgets"), QJsonValue(jsArray));
     QJsonDocument document;
     document.setObject(final_object);
     QByteArray bytes = document.toJson( QJsonDocument::Indented );
