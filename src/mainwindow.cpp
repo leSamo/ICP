@@ -87,8 +87,8 @@ QTreeWidgetItem* MainWindow::AttachOrRefreshNode(QTreeWidgetItem *parent, QStrin
     }
 
     newItem->setText(0, topicSegment);
-    newItem->setText(1, msgContent);
-    newItem->setText(2, timeOfMsgReceived);
+    msgContent != "" ? newItem->setText(1, msgContent) : void();
+    timeOfMsgReceived != "" ? newItem->setText(2, timeOfMsgReceived) : void();
     newItem->setText(3, topic);
 
     return newItem;
@@ -312,8 +312,7 @@ void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
         std::stringstream ss(Qtopic.toUtf8().constData());
         std::string segment;
 
-        while(std::getline(ss, segment, '/'))
-        {
+        while(std::getline(ss, segment, '/')) {
            seglist.push_back(segment);
         }
     }
