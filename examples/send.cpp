@@ -14,7 +14,6 @@
 #define SERVER_ADDRESS "broker.emqx.io"
 #define SERVER_PORT 1883
 #define MAX_MSG_LENGTH 20
-#define DURATION 60 	// for how many seconds send messages
 
 void onConnectionAckReceive(struct mosquitto *mosq, void *obj, int reason_code) {
 	printf("%s\n", mosquitto_connack_string(reason_code));
@@ -77,11 +76,14 @@ void messageLoop(struct mosquitto *mosq, std::vector<std::string> configList, in
 }
 
 int main(int argc, char *argv[]) {
-	if (argc != 2) {
+	if (argc != 3) {
 		printf("Invalid number of arguments\n");
+		return EXIT_FAILURE;
 	}
-	else if (argv[1] == "--help") {
-		printf("Usage: ./send [config-file]\n");
+
+	if (std::string(argv[1]) == "--help") {
+		printf("Usage: ./send [config file] [duration in seconds]\n");
+		return EXIT_SUCCESS;
 	}
 
 	// initialize and setup mosquitto client
@@ -99,7 +101,7 @@ int main(int argc, char *argv[]) {
 
 	int retval = mosquitto_connect(client, SERVER_ADDRESS, SERVER_PORT, 60);
 
-	if (retval){
+	if (retval) {
 		mosquitto_destroy(client);
 		fprintf(stderr, "Error: %s\n", mosquitto_strerror(retval));
 		return EXIT_FAILURE;
@@ -107,7 +109,7 @@ int main(int argc, char *argv[]) {
 
 	retval = mosquitto_loop_start(client);
 
-	if (retval){
+	if (retval) {
 		mosquitto_destroy(client);
 		fprintf(stderr, "Error: %s\n", mosquitto_strerror(retval));
 		return EXIT_FAILURE;
@@ -128,7 +130,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// synchronously send messages every second
-	for (uint i = 0; i < DURATION; i++) {
+	for (uint i = 0; i < std::stoi(argv[2]); i++) {
 		messageLoop(client, configList, i);
 		sleep(1);
 	}
