@@ -1,3 +1,8 @@
+/*! \file actionlistener.h
+ * ICP project 2020/21
+ * Author: Samuel Olekšák
+ */
+
 #ifndef ACTIONLISTENER_H
 #define ACTIONLISTENER_H
 

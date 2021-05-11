@@ -1,3 +1,9 @@
+/*! \file callback.h
+ * ICP project 2020/21
+ * Author: Samuel Olekšák
+ */
+
+
 #ifndef CALLBACK_H
 #define CALLBACK_H
 

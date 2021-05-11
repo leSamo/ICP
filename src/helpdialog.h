@@ -1,3 +1,9 @@
+/*! \file helpdialog.h
+ * ICP project 2020/21
+ * Author: Michal Findra
+ */
+
+
 #ifndef HELPDIALOG_H
 #define HELPDIALOG_H
 

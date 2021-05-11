@@ -1,8 +1,8 @@
-/*!
- * \author Samuel Olekšák
- * \author Michal Findra
- * \date 2021-8-5
+/*! \file callback.cpp
+ * ICP project 2020/21
+ * Author: Samuel Olekšák
  */
+
 
 #include "callback.h"
 

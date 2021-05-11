@@ -1,7 +1,8 @@
-/*!
- * \file actionlistener.cpp
- * authors: Samuel Olekšák, Michal Findra
+/*! \file actionlistener.cpp
+ * ICP project 2020/21
+ * Author: Samuel Olekšák
  */
+
 
 #include "actionlistener.h"
 

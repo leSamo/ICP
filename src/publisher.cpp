@@ -1,3 +1,8 @@
+/*! \file publisher.cpp
+ * ICP project 2020/21
+ * Authors: Samuel Olekšák
+ */
+
 #include <iostream>
 #include <cstdlib>
 #include <string>

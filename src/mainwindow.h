@@ -1,3 +1,9 @@
+/*! \file mainwindow.h
+ * ICP project 2020/21
+ * Authors: Michal Findra, Samuel Olekšák
+ */
+
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

@@ -1,3 +1,8 @@
+/*! \file async_consume.h
+ * ICP project 2020/21
+ * Author: Samuel Olekšák
+ */
+
 #ifndef ASYNC_CONSUME_H
 #define ASYNC_CONSUME_H
 

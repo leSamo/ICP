@@ -1,12 +1,23 @@
+/*! \file topicdialog.cpp
+ * ICP project 2020/21
+ * Author: Samuel Olekšák
+ */
+
 #include "topicdialog.h"
 #include "ui_topicdialog.h"
 
-TopicDialog::TopicDialog(QWidget *parent, QString topic) :
-    QDialog(parent),
-    ui(new Ui::TopicDialog) {
+/*!
+* Topic Dialog constructor
+* \param[in] parent - parent widget
+* \param[in] topic
+* \param[in] msgs - deque of all message history of this this topic
+*/
+TopicDialog::TopicDialog(QWidget *parent, QString topic, std::deque<msg> msgs) : QDialog(parent), ui(new Ui::TopicDialog) {
     ui->setupUi(this);
+
     this->topic = topic;
-    setTitle(topic);
+    this->setWindowTitle(topic);
+    this->setMsgs(msgs);
 
     // hide row numbers in tablewidget
     ui->tableWidget->verticalHeader()->setVisible(false);
@@ -16,10 +27,10 @@ TopicDialog::~TopicDialog() {
     delete ui;
 }
 
-void TopicDialog::setTitle(QString title) {
-    this->setWindowTitle(title);
-}
-
+/*!
+* Fill table with messages
+* \param[in] msgs - deque of messages to display in the table
+*/
 void TopicDialog::setMsgs(std::deque<msg> msgs) {
     ui->tableWidget->setRowCount(msgs.size());
 
@@ -35,6 +46,10 @@ void TopicDialog::setMsgs(std::deque<msg> msgs) {
     }
 }
 
+/*!
+* User clicked send btn - read input field and send
+* message to current topic
+*/
 void TopicDialog::on_btnSend_clicked() {
     std::string msg = ui->inputMsg->toPlainText().toUtf8().constData();
 
@@ -42,6 +57,9 @@ void TopicDialog::on_btnSend_clicked() {
     publisher->Publish(topic.toUtf8().constData(), msg);
 }
 
+/*!
+* User clicked OK btn - close the topic modal
+*/
 void TopicDialog::on_btnOK_clicked() {
     this->destroy(true);
 }

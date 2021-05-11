@@ -1,3 +1,9 @@
+/*! \file message.h
+ * ICP project 2020/21
+ * Author: Samuel Olekšák
+ */
+
+
 #ifndef MESSAGE
 #define MESSAGE
 

@@ -1,3 +1,9 @@
+/*! \file topicdialog.h
+ * ICP project 2020/21
+ * Author: Samuel Olekšák
+ */
+
+
 #ifndef TOPICDIALOG_H
 #define TOPICDIALOG_H
 
@@ -15,8 +21,7 @@ class TopicDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit TopicDialog(QWidget *parent, QString topic);
-    void setMsgs(std::deque<msg> msgs);
+    explicit TopicDialog(QWidget *parent, QString topic, std::deque<msg> msgs);
     ~TopicDialog();
 
 private slots:
@@ -26,7 +31,8 @@ private slots:
 private:
     Ui::TopicDialog *ui;
     QString topic;
-    void setTitle(QString title);
+
+    void setMsgs(std::deque<msg> msgs);
 };
 
 #endif // TOPICDIALOG_H

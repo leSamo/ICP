@@ -1,3 +1,8 @@
+/*! \file helpdialog.cpp
+ * ICP project 2020/21
+ * Author: Michal Findra
+ */
+
 #include "helpdialog.h"
 #include "ui_helpdialog.h"
 

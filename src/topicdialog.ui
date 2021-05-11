@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+<author>Samuel Olekšák</author>
  <class>TopicDialog</class>
  <widget class="QDialog" name="TopicDialog">
   <property name="geometry">
@@ -41,7 +42,7 @@
    <item row="2" column="1">
     <widget class="QPushButton" name="btnOK">
      <property name="text">
-      <string>OK</string>
+      <string>Close</string>
      </property>
     </widget>
    </item>

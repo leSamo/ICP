@@ -1,3 +1,8 @@
+/*! \file mainwindow.cpp
+ * ICP project 2020/21
+ * Authors: Samuel Olekšák, Michal Findra
+ */
+
 #include <sstream>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -336,12 +341,10 @@ void MainWindow::showTopicHistory(QTreeWidgetItem *item, int column) {
 
     QString topic = item->text(3); // row selected by user, topic is extracted by reading column with index 3
 
-    TopicDialog *topicDialog = new TopicDialog(this, topic);
-    topicDialog->show();
-
     // filter only msgs, which are of desired topic
     std::deque<msg> filteredMsgs;
     std::copy_if(msgs.begin(), msgs.end(), std::back_inserter(filteredMsgs), [topic](msg message){return message.topic == topic;});
 
-    topicDialog->setMsgs(filteredMsgs);
+    TopicDialog *topicDialog = new TopicDialog(this, topic, filteredMsgs);
+    topicDialog->show();
 }

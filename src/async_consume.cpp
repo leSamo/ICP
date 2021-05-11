@@ -1,6 +1,8 @@
-// --------------------
-//
-// --------------------
+/*! \file async_consume.cpp
+ * ICP project 2020/21
+ * Author: Samuel Olekšák
+ */
+
 
 #include <iostream>
 #include <cstdlib>

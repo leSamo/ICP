@@ -1,3 +1,8 @@
+/*! \file main.cpp
+ * ICP project 2020/21
+ * Authors: Samuel Olekšák, Michal Findra
+ */
+
 #include "mainwindow.h"
 #include <QApplication>
 
