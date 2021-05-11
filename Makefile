@@ -1,5 +1,9 @@
 all:
-	# build project
+	qmake-qt5 -makefile src -o build/
+	cd build/; make
+
+run: all
+	./build/ICP
 
 doxygen:
 	doxygen Doxyfile	
