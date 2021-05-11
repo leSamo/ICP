@@ -8,7 +8,7 @@
 #include "mqtt/client.h"
 #include "publisher.h"
 
-#define CLIENT_ID "xoleksxfindr"
+#define CLIENT_ID "xoleksxfindrSender"
 
 /*!
 * Construct and publish a message
