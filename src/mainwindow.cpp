@@ -35,20 +35,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->treeWidget->setColumnWidth(0, 200);
     ui->treeWidget->setColumnWidth(1, 200);
 
+    // check config file for dashboard widgets
     QString fileName("../widgets.json");
     QFile file(fileName);
-
     if(QFileInfo::exists(fileName))
     {
         readJson();
     } else {
         file.open(QIODevice::ReadWrite | QIODevice::Text);
-
         qDebug()<<"file created"<<endl;
         file.close();
     }
-
-
 
     // setup tree widget on double click event handler
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
@@ -342,6 +339,7 @@ void MainWindow::DisplayMsg(QString Qtopic, QString Qmsg) {
         }        
     }
 
+    // set value in dashboard widget
     MainWindow::AddToDash(Qmsg, Qtopic);
 }
 
@@ -369,22 +367,23 @@ void MainWindow::showTopicHistory(QTreeWidgetItem *item, int column) {
 */
 void MainWindow::readJson()
 {
+      // read dashboard widget data from json file
       QString val;
       QFile file;
       file.setFileName("../widgets.json");
-      file.open(QIODevice::ReadOnly | QIODevice::Text);
-      val = file.readAll();
-      file.close();
-      qWarning() << val;
+      if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        val = file.readAll();
+        file.close();
+      }
 
+      // parse json document
       QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
-
       QJsonObject jsObject = d.object();
       QJsonArray jsArray = jsObject["widgets"].toArray();
 
+      // insert all widgets from json file
       foreach (const QJsonValue & value, jsArray) {
           QJsonObject obj = value.toObject();
-
           ui->dash_name->setPlainText((obj["name"].toString()));
           ui->dash_topic->setPlainText((obj["topic"].toString()));
           if (QString::compare((obj["type"].toString()), "Recieve",Qt::CaseInsensitive)){
@@ -395,6 +394,11 @@ void MainWindow::readJson()
 
           ui->btnAdd_item->click();
       }
+
+      // reset textbox text
+      ui->dash_name->setPlainText("Name of dash element");
+      ui->dash_topic->setPlainText("Topic of dash element");
+      ui->dash_CB->setCurrentText("Recieve");
    }
 
 
@@ -405,6 +409,8 @@ void MainWindow::readJson()
 void MainWindow::closeEvent (QCloseEvent *event){
     QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
     QJsonArray json_array;
+
+    // save all created dashboard widgets into json object
     for (int y = 0; y < 2; y++){
         for (int x = 0; x < 5;x++){
             if (layout->itemAtPosition(x,y) != 0){
@@ -424,30 +430,26 @@ void MainWindow::closeEvent (QCloseEvent *event){
                  json_array.push_back(QJsonValue(item_data));
             }
         }
-
     }
 
+    // put created objects into json list into json document
     QJsonObject final_object;
-
     final_object.insert(QString("widgets"), QJsonValue(json_array));
     qDebug() << final_object;
-
     QJsonDocument document;
     document.setObject(final_object);
     QByteArray bytes = document.toJson( QJsonDocument::Indented );
 
-
+    // write created json object into json file
     QString fileName("../widgets.json");
     QFile file(fileName);
 
-
-     if ( file.open(QIODevice::ReadWrite | QIODevice::Text)) {
-             QTextStream iStream( &file );
-             iStream.setCodec( "utf-8" );
-             iStream << bytes;
-             file.close();
-
-     }
+    if ( file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+       QTextStream iStream( &file );
+       iStream.setCodec( "utf-8" );
+       iStream << bytes;
+       file.close();
+    }
 }
 
 void MainWindow::on_actionSnapshot_triggered() {
