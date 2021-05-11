@@ -1,0 +1,20 @@
+{
+   "widgets": [
+      {
+         "name": "WidName1",
+         "topic": "server/topic1",
+         "type": "Recieve"
+      },
+      {
+         "name": "WidName2",
+         "topic": "server/topic2",
+         "type": "Send"
+      },
+      {
+         "name": "WidName3",
+         "topic": "server/topic3",
+         "type": "Send"
+      }
+   ]   
+}
+   

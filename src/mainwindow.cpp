@@ -14,6 +14,7 @@
 #include "mqtt/async_client.h"
 #include <chrono>
 #include <iomanip>
+#include <QCloseEvent>
 
 using namespace std;
 using namespace chrono;
@@ -31,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->treeWidget->setColumnHidden(3, true);
     ui->treeWidget->setColumnWidth(0, 200);
     ui->treeWidget->setColumnWidth(1, 200);
+
+    readJson();
 
     // setup tree widget on double click event handler
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
@@ -345,3 +348,33 @@ void MainWindow::showTopicHistory(QTreeWidgetItem *item, int column) {
     TopicDialog *topicDialog = new TopicDialog(this, serverAddress, topic, filteredMsgs);
     topicDialog->show();
 }
+void MainWindow::readJson()
+{
+      QString val;
+      QFile file;
+      file.setFileName("../test.json");
+      file.open(QIODevice::ReadOnly | QIODevice::Text);
+      val = file.readAll();
+      file.close();
+      qWarning() << val;
+
+      QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
+
+      QJsonObject jsObject = d.object();
+      QJsonArray jsArray = jsObject["widgets"].toArray();
+
+      foreach (const QJsonValue & value, jsArray) {
+          QJsonObject obj = value.toObject();
+
+          ui->dash_name->setPlainText((obj["name"].toString()));
+          ui->dash_topic->setPlainText((obj["topic"].toString()));
+          if (QString::compare((obj["type"].toString()), "Recieve",Qt::CaseInsensitive)){
+              ui->dash_CB->setCurrentText("Recieve");
+          } else {
+              ui->dash_CB->setCurrentText("Send");
+          }
+
+          ui->btnAdd_item->click();
+      }
+
+   }

@@ -47,6 +47,8 @@ private:
 
     QTreeWidgetItem* AttachOrRefreshNode(QTreeWidgetItem *parent, QString topicSegment, QString msgContent, QString timeOfMsgReceived, QString topic);
     void AddToDash(QString desc, QString topic);
+    void readJson();
+
 
 
 public slots:
