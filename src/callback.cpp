@@ -9,12 +9,6 @@
 const int N_RETRY_ATTEMPTS = 5;
 const int QOS = 2;
 
-// This deomonstrates manually reconnecting to the broker by calling
-// connect() again. This is a possibility for an application that keeps
-// a copy of it's original connect_options, or if the app wants to
-// reconnect with different options.
-// Another way this can be done manually, if using the same options, is
-// to just call the async_client::reconnect() method.
 void callback::reconnect() {
     std::this_thread::sleep_for(std::chrono::milliseconds(2500));
     try {
@@ -52,7 +46,7 @@ void callback::on_success(const mqtt::token& token) {}
 void callback::connected(const std::string& info) {
     std::cout << "Connected" << std::endl;
 
-    cli_.subscribe("xoleksxfindr/#", 2, nullptr, subListener_);
+    cli_.subscribe(topic_, 2, nullptr, subListener_);
 }
 
 /*!

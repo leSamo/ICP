@@ -45,18 +45,18 @@ private:
     HelpDialog *help;
     std::deque<msg> msgs;
     std::string serverAddress;
+    mqtt::async_client *mqttClient;
 
     QTreeWidgetItem* AttachOrRefreshNode(QTreeWidgetItem *parent, QString topicSegment, QString msgContent, QString timeOfMsgReceived, QString topic);
     void AddToDash(QString value, QString topic);
     void readJson();
     void closeEvent (QCloseEvent *event);
-
-
+    int disconnect();
+    bool isConnected();
 
 public slots:
     void DisplayMsg(QString topic, QString msg);
     void showTopicHistory(QTreeWidgetItem *item, int column);
-    void CreateSnapshot();
 };
 
 #endif // MAINWINDOW_H

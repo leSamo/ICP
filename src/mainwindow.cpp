@@ -6,7 +6,6 @@
 #include <sstream>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "async_consume.h"
 #include <thread>
 #include "helpdialog.h"
 #include "topicdialog.h"
@@ -51,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // setup tree widget on double click event handler
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
             this, SLOT(showTopicHistory(QTreeWidgetItem*, int)));
+
+    mqttClient = nullptr;
 }
 
 MainWindow::~MainWindow() {
@@ -120,21 +121,20 @@ void MainWindow::on_btnConnect_clicked() {
     QString topic = ui->inputTopic->toPlainText();
     ui->txtTitle->setText(topic);
     serverAddress = server.toUtf8().constData();
-/*
+
     if (isConnected()) {
         disconnect();
     }
-*/
 
     callback *eventCallback;
-    mqtt::async_client *mqttClient = nullptr;
+    mqttClient = nullptr;
     mqtt::connect_options *connectionOptions;
 
     // we need an async client to be able to listen to msgs on background
     mqttClient = new mqtt::async_client(server.toUtf8().constData(), CLIENT_ID);
 
     connectionOptions = new mqtt::connect_options();
-    eventCallback = new callback(*mqttClient, *connectionOptions);
+    eventCallback = new callback(*mqttClient, *connectionOptions, topic.toUtf8().constData());
     (*mqttClient).set_callback(*eventCallback);
 
     QObject::connect(
@@ -150,7 +150,27 @@ void MainWindow::on_btnConnect_clicked() {
     catch (const mqtt::exception& e) {
         std::cout << "\nConnection failed: " << e << std::endl;
     }
+}
 
+int MainWindow::disconnect() {
+    cout << "Disconnecting" << endl;
+
+    try {
+        mqttClient->disconnect()->wait();
+    }
+    catch (const mqtt::exception& e) {
+        cout << "Failed to disconnect: " << e << endl;
+        return 1;
+    }
+
+    cout << "Disconnected" << endl;
+    mqttClient = nullptr;
+
+    return 0;
+}
+
+bool MainWindow::isConnected() {
+    return mqttClient != nullptr;
 }
 
 /*!

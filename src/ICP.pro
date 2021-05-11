@@ -16,7 +16,6 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    async_consume.cpp \
     helpdialog.cpp \
     callback.cpp \
     actionlistener.cpp \
@@ -24,7 +23,6 @@ SOURCES += main.cpp\
     publisher.cpp
 
 HEADERS  += mainwindow.h \
-    async_consume.h \
     helpdialog.h \
     callback.h \
     actionlistener.h \
