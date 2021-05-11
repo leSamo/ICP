@@ -1,6 +1,6 @@
 all:
-	qmake-qt5 -makefile src -o build/
-	cd build/; make
+	qmake -makefile src -o build/ ||qmake-qt5 -makefile src -o build/
+	cd build/ && make
 
 run: all
 	./build/ICP
