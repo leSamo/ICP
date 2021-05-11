@@ -1,9 +1,9 @@
 all:
-	qmake -makefile src -o build/ ||qmake-qt5 -makefile src -o build/
-	cd build/ && make
+	qmake -makefile src -o src/ ||qmake-qt5 -makefile src -o src/
+	cd src/ && make
 
 run: all
-	./build/ICP
+	./src/ICP
 
 doxygen:
 	doxygen Doxyfile	
