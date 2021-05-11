@@ -14,26 +14,26 @@
 class callback : public QObject, public virtual mqtt::callback, public virtual mqtt::iaction_listener {
     Q_OBJECT
 private:
-    int nretry_;
-    mqtt::async_client& cli_;
-    mqtt::connect_options& connOpts_;
-    action_listener subListener_;
+    int timesToRetry_;
     std::string topic_;
+    mqtt::async_client& client_;
+    mqtt::connect_options& connectionOptions_;
+    action_listener subscriptionListener_;
 
     void reconnect();
-
-    void on_failure(const mqtt::token& tokenId);
-    void on_success(const mqtt::token& tokenId) override;
 
     void connected(const std::string& reason) override;
     void connection_lost(const std::string& reason) override;
     void message_arrived(mqtt::const_message_ptr msg) override;
 
+    void on_failure(const mqtt::token& tokenId);
+    void on_success(const mqtt::token& tokenId) {};
+
     void delivery_complete(mqtt::delivery_token_ptr token) override {}
 
 public:
-    callback(mqtt::async_client& cli, mqtt::connect_options& connOpts, std::string topic)
-        : nretry_(0), cli_(cli), connOpts_(connOpts), subListener_("Subscription"), topic_(topic) {}
+    callback(mqtt::async_client& client, mqtt::connect_options& connectionOptions, std::string topic)
+        : timesToRetry_(3), client_(client), connectionOptions_(connectionOptions), subscriptionListener_("Subscription"), topic_(topic) {}
 signals:
     void DisplayMsg(QString topic, QString msg);
 };

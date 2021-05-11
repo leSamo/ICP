@@ -6,7 +6,6 @@
 #include <sstream>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <thread>
 #include "helpdialog.h"
 #include "topicdialog.h"
 #include <QDebug>

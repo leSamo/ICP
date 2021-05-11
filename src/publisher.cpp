@@ -4,18 +4,13 @@
  */
 
 #include <iostream>
-#include <cstdlib>
-#include <string>
-#include <cstring>
-#include <cctype>
-#include "mqtt/async_client.h"
 #include "mqtt/client.h"
 #include "publisher.h"
 
-#define CLIENT_ID "xoleks"
+#define CLIENT_ID "xoleksxfindr"
 
 /*!
-* Publish a message
+* Construct and publish a message
 * \param[in] serverAddress
 * \param[in] topic
 * \param[in] content - message to publish
@@ -29,7 +24,7 @@ void Publisher::Publish(std::string serverAddress, std::string topic, std::strin
         client.publish(mqtt::message(topic, content, 2, false));
         client.disconnect();
     }
-    catch (const mqtt::exception& exc) {
-        std::cout << exc.what() << std::endl;
+    catch (const mqtt::exception& e) {
+        std::cout << e.what() << std::endl;
     }
 }
