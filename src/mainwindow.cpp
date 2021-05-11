@@ -33,7 +33,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->treeWidget->setColumnWidth(0, 200);
     ui->treeWidget->setColumnWidth(1, 200);
 
-    readJson();
+    QString fileName("../widgets.json");
+    QFile file(fileName);
+
+    if(QFileInfo::exists(fileName))
+    {
+        readJson();
+    } else {
+        file.open(QIODevice::ReadWrite | QIODevice::Text);
+
+        qDebug()<<"file created"<<endl;
+        file.close();
+    }
+
+
 
     // setup tree widget on double click event handler
     connect(ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
@@ -348,11 +361,15 @@ void MainWindow::showTopicHistory(QTreeWidgetItem *item, int column) {
     TopicDialog *topicDialog = new TopicDialog(this, serverAddress, topic, filteredMsgs);
     topicDialog->show();
 }
+
+/*!
+* Read widgets from json config file
+*/
 void MainWindow::readJson()
 {
       QString val;
       QFile file;
-      file.setFileName("../test.json");
+      file.setFileName("../widgets.json");
       file.open(QIODevice::ReadOnly | QIODevice::Text);
       val = file.readAll();
       file.close();
@@ -376,5 +393,58 @@ void MainWindow::readJson()
 
           ui->btnAdd_item->click();
       }
-
    }
+
+
+/*!
+* Save created widgets into json file on exit
+* \param[in] event - MainWindow close event
+*/
+void MainWindow::closeEvent (QCloseEvent *event){
+    QGridLayout *layout = qobject_cast<QGridLayout*>(ui->dash_g->layout());
+    QJsonArray json_array;
+    for (int y = 0; y < 2; y++){
+        for (int x = 0; x < 5;x++){
+            if (layout->itemAtPosition(x,y) != 0){
+                QList<QLabel *> labels = layout->itemAtPosition(x,y)->widget()->findChildren<QLabel *>();
+                QJsonObject item_data;
+                QStringList pieces = labels[0]->text().split( "Name: " );
+                item_data.insert("name", QJsonValue(pieces.value( pieces.length() - 1 )));
+
+                QStringList pieces2 = labels[1]->text().split( "Topic: " );
+                item_data.insert("topic", QJsonValue(pieces2.value( pieces2.length() - 1 )));
+
+                if (labels.count() == 2){
+                    item_data.insert("type", "Send");
+                } else {
+                    item_data.insert("type", "Recieve");
+                }
+                 json_array.push_back(QJsonValue(item_data));
+            }
+        }
+
+    }
+
+    QJsonObject final_object;
+
+    final_object.insert(QString("widgets"), QJsonValue(json_array));
+    qDebug() << final_object;
+
+    QJsonDocument document;
+    document.setObject(final_object);
+    QByteArray bytes = document.toJson( QJsonDocument::Indented );
+
+
+    QString fileName("../widgets.json");
+    QFile file(fileName);
+
+
+     if ( file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+             QTextStream iStream( &file );
+             iStream.setCodec( "utf-8" );
+             iStream << bytes;
+             file.close();
+
+     }
+
+}
