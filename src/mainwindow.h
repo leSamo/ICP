@@ -36,6 +36,7 @@ private slots:
     void on_btnConnect_clicked();
     void on_btnAdd_item_clicked();
     void on_actionHelp_triggered();
+    void on_actionSnapshot_triggered();
     void onRemove();
     void onSend();
 
@@ -55,6 +56,7 @@ private:
 public slots:
     void DisplayMsg(QString topic, QString msg);
     void showTopicHistory(QTreeWidgetItem *item, int column);
+    void CreateSnapshot();
 };
 
 #endif // MAINWINDOW_H

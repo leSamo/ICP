@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-<author>Michal Findra</author>
+ <author>Michal Findra</author>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
@@ -261,7 +261,7 @@
      <x>0</x>
      <y>0</y>
      <width>1212</width>
-     <height>24</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -270,6 +270,8 @@
     </property>
     <addaction name="separator"/>
     <addaction name="actionHelp"/>
+    <addaction name="separator"/>
+    <addaction name="actionSnapshot"/>
    </widget>
    <addaction name="menuMenu"/>
   </widget>
@@ -280,6 +282,11 @@
    </property>
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionSnapshot">
+   <property name="text">
+    <string>Snapshot</string>
    </property>
   </action>
  </widget>

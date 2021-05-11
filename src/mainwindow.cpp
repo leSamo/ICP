@@ -15,6 +15,8 @@
 #include <chrono>
 #include <iomanip>
 #include <QCloseEvent>
+#include <fstream>
+#include <filesystem>
 
 using namespace std;
 using namespace chrono;
@@ -446,5 +448,19 @@ void MainWindow::closeEvent (QCloseEvent *event){
              file.close();
 
      }
+}
 
+void MainWindow::on_actionSnapshot_triggered() {
+    for (size_t i = 0; i < msgs.size(); i++) {
+        msg currentMsg = msgs[msgs.size() - i - 1];
+        std::string msgTopic = std::string(currentMsg.topic.toUtf8().constData());
+
+        std::filesystem::create_directories("snapshots/" + msgTopic);
+
+        std::ofstream msgFile("./snapshots/" + msgTopic + "/payload.txt");
+        msgFile << currentMsg.content.toUtf8().constData() << std::endl;
+        msgFile.close();
+    }
+
+    cout << "Snapshot written!" << endl;
 }
