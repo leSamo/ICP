@@ -412,8 +412,8 @@ void MainWindow::closeEvent (QCloseEvent *event){
     QJsonArray jsArray;
 
     // save all created dashboard widgets into json object
-    for (int y = 0; y < 2; y++){
-        for (int x = 0; x < 5;x++){
+    for (int y = 1; y >= 0; y--){
+        for (int x = 4; x >= 0;x--){
             if (layout->itemAtPosition(x,y) != 0){
                 QList<QLabel *> labels = layout->itemAtPosition(x,y)->widget()->findChildren<QLabel *>();
                 QJsonObject item_data;
