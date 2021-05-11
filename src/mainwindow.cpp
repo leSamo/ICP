@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->treeWidget->setColumnWidth(1, 200);
 
     // check config file for dashboard widgets
-    QString fileName("../widgets.json");
+    QString fileName("widgets.json");
     QFile file(fileName);
     if(QFileInfo::exists(fileName))
     {
@@ -370,7 +370,7 @@ void MainWindow::readJson()
       // read dashboard widget data from json file
       QString val;
       QFile file;
-      file.setFileName("../widgets.json");
+      file.setFileName("widgets.json");
       if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         val = file.readAll();
         file.close();
@@ -380,7 +380,7 @@ void MainWindow::readJson()
       QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
       QJsonObject jsObject = d.object();
       QJsonArray jsArray = jsObject["widgets"].toArray();
-
+        qDebug() << jsObject;
       // insert all widgets from json file
       foreach (const QJsonValue & value, jsArray) {
           QJsonObject obj = value.toObject();
@@ -441,10 +441,10 @@ void MainWindow::closeEvent (QCloseEvent *event){
     QByteArray bytes = document.toJson( QJsonDocument::Indented );
 
     // write created json object into json file
-    QString fileName("../widgets.json");
+    QString fileName("widgets.json");
     QFile file(fileName);
 
-    if ( file.open(QIODevice::ReadWrite | QIODevice::Text)) {
+    if ( file.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate)) {
        QTextStream iStream( &file );
        iStream.setCodec( "utf-8" );
        iStream << bytes;
