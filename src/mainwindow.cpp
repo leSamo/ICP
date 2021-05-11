@@ -343,7 +343,7 @@ void MainWindow::showTopicHistory(QTreeWidgetItem *item, int column) {
 
     // filter only msgs, which are of desired topic
     std::deque<msg> filteredMsgs;
-    std::copy_if(msgs.begin(), msgs.end(), std::back_inserter(filteredMsgs), [topic](msg message){return message.topic == topic;});
+    std::copy_if(msgs.begin(), msgs.end(), std::back_inserter(filteredMsgs), [topic](msg message){std::string content = message.topic.toUtf8().constData(); return content.find(topic.toUtf8().constData()) == 0;});
 
     TopicDialog *topicDialog = new TopicDialog(this, topic, filteredMsgs);
     topicDialog->show();

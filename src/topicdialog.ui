@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-<author>Samuel Olekšák</author>
+ <author>Samuel Olekšák</author>
  <class>TopicDialog</class>
  <widget class="QDialog" name="TopicDialog">
   <property name="geometry">
@@ -54,6 +54,11 @@
        <height>240</height>
       </size>
      </property>
+     <column>
+      <property name="text">
+       <string>Topic</string>
+      </property>
+     </column>
      <column>
       <property name="text">
        <string>Time</string>

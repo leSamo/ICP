@@ -35,14 +35,17 @@ void TopicDialog::setMsgs(std::deque<msg> msgs) {
     ui->tableWidget->setRowCount(msgs.size());
 
     for (int rowIndex = 0; rowIndex < msgs.size(); rowIndex++) {
+        QTableWidgetItem *topicCell = new QTableWidgetItem;
         QTableWidgetItem *timeCell = new QTableWidgetItem;
         QTableWidgetItem *messageCell = new QTableWidgetItem;
 
+        topicCell->setText(msgs[rowIndex].topic);
         timeCell->setText(msgs[rowIndex].time);
         messageCell->setText(msgs[rowIndex].content);
 
-        ui->tableWidget->setItem(rowIndex, 0, timeCell);
-        ui->tableWidget->setItem(rowIndex, 1, messageCell);
+        ui->tableWidget->setItem(rowIndex, 0, topicCell);
+        ui->tableWidget->setItem(rowIndex, 1, timeCell);
+        ui->tableWidget->setItem(rowIndex, 2, messageCell);
     }
 }
 
